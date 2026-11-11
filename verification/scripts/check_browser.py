@@ -14,7 +14,7 @@ with tempfile.TemporaryDirectory() as temp:
   for _ in range(160):
    try:urllib.request.urlopen(base+'/healthz');break
    except Exception:time.sleep(.05)
-  chrome=subprocess.Popen(['/usr/bin/google-chrome','--headless=new','--no-sandbox','--disable-gpu','--user-data-dir='+temp+'/chrome','--remote-debugging-port='+str(debug),'--remote-allow-origins=*','about:blank'],stdout=log,stderr=log)
+  chrome=subprocess.Popen([os.environ.get('CHROME_BIN','/usr/bin/google-chrome'),'--headless=new','--no-sandbox','--disable-gpu','--user-data-dir='+temp+'/chrome','--remote-debugging-port='+str(debug),'--remote-allow-origins=*','about:blank'],stdout=log,stderr=log)
   for _ in range(160):
    try:targets=json.load(urllib.request.urlopen(f'http://127.0.0.1:{debug}/json'));break
    except Exception:time.sleep(.05)
