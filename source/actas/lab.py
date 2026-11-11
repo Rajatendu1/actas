@@ -55,7 +55,10 @@ def _check_payload(p: dict) -> tuple[list[str], list[dict], bool, int]:
     rv = p.get("revoke_hop", 0)
     if not isinstance(rv, int) or isinstance(rv, bool) or not 0 <= rv <= len(clean):
         _bad("revoke_hop must be 0 (none) or a hop number in the chain")
-    return sorted(set(user)), clean, bool(p.get("bind_final", False)), rv
+    bind = p.get("bind_final", False)
+    if type(bind) is not bool:
+        _bad("bind_final must be true or false")
+    return sorted(set(user)), clean, bind, rv
 
 
 def run_lab(payload: dict) -> dict:
