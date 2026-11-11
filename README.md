@@ -1,10 +1,16 @@
 # Actas: recovered source and new maintenance baseline
 
 The original 0.14.1 application source has been recovered from its authorized
-Vercel deployment. All 22 Python modules, guided policy workbench and runtime configuration under
-`source/` are unchanged recovered inputs. Thirty of 31 recovered files remain
-byte-identical; `source/README.md` is replaced with a current-guide pointer. `ORIGINAL-MANIFEST.json` records verified provider content IDs,
-SHA256 digests and sizes. This is the recovered 0.14.1 maintenance baseline, not a new application release.
+Vercel deployment. The guided policy workbench HTML and runtime configuration remain
+unchanged recovered inputs. Twenty-eight of 31 recovered files remain byte-identical.
+The current guide pointer and two lab input-validation modules are documented
+maintenance edits in `REPOSITORY-CURATION.json`. `ORIGINAL-MANIFEST.json` retains
+the original provider content IDs, SHA256 digests and sizes. This remains the
+recovered 0.14.1 maintenance line, not the lost full development archive.
+
+The lab rejects duplicate JSON fields, overly nested JSON and non-boolean
+`bind_final` values with a client error. Normal fictional lab controls and valid
+request behavior are unchanged.
 
 This is not the lost full development archive. Its original tests, verification
 scripts, target hash lock and operational/threat documents were excluded from
@@ -89,14 +95,14 @@ A restored old snapshot omits later revocations/proof use. No reconciliation,
 RPO/RTO or compromise-response guarantee is implemented. Stop every writer
 before snapshot/rotation; the CLI acknowledgement is not process detection.
 Public demo issuer keys are throwaway. Do not replace real identity or consent
-systems with this application. The current hosted deployment was not changed.
+systems with this application. A source change alone does not promote a hosted deployment.
 
 ## Recovery provenance
 
 Recovered November 11, 2026 from retained Vercel deployment inputs.
 The provider content IDs and original digests are recorded in
-`ORIGINAL-MANIFEST.json`; the documented README replacement is an exception
-when checking that original manifest. `REPOSITORY-CURATION.json` records it.
+`ORIGINAL-MANIFEST.json`; the documented README replacement and lab input-validation edits are exceptions
+when checking that original manifest. `REPOSITORY-CURATION.json` records their hashes.
 
 The immutable recovered archive SHA256 is
 `5c013a488ad7b11e771f7604e70f8a4c43afa432a720d7e5b43ee17dbd3dd7bd`.
@@ -105,7 +111,7 @@ The lost full archive expected SHA256 is
 They are different artifacts. The exact original runtime archive is preserved
 separately from this repository baseline.
 
-The clean-extracted full gate passed on November 11, 2026. See
+The full local maintenance-candidate gate passed on November 11, 2026. See
 `verification/CLEAN-CHECKOUT-RESULTS.txt`. The test-client dependency emits a
 Starlette/httpx deprecation warning. That warning is not a failed assertion,
 but the dependency pair will need review before a future dependency update.

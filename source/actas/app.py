@@ -503,7 +503,7 @@ LAB_MAX_BODY = 4096
 @app.post("/demo/lab")
 async def demo_lab(request: Request):
     """Run a visitor-designed chain on an isolated, throwaway service."""
-    from . import lab
+    from . import lab, workbench
 
     client = request.client.host if request.client else "?"
     fwd = request.headers.get("x-forwarded-for", "").split(",")[0].strip()
@@ -516,10 +516,9 @@ async def demo_lab(request: Request):
         if len(raw) + len(chunk) > LAB_MAX_BODY:
             raise errors.invalid_request("body too large")
         raw.extend(chunk)
-    import json as _j
     try:
-        payload = _j.loads(raw)
-    except ValueError:
+        payload = workbench.load_pack_json(raw)
+    except (ValueError, RecursionError):
         raise errors.invalid_request("body must be JSON")
     return lab.run_lab(payload)
 
