@@ -18,7 +18,7 @@ README. Use the commands below for this recovered baseline.
 Tested on Linux x86_64 with Python 3.10 and Chrome 156. A newly recorded fixed-version dependency resolution is supplied for this
 recovery target. It has no wheel hashes and is not the lost hash-locked
 installation; `verification/requirements-linux-py310-recovery.txt` records the dependency versions used.
-Chrome must be available at `/usr/bin/google-chrome`. The browser check uses a
+Chrome must be available at `/usr/bin/google-chrome`, or set `CHROME_BIN` to its executable. The browser check uses a
 fresh temporary profile and loopback servers only. No signed-in browser,
 provider account, real token, API key or model call is needed.
 
@@ -54,7 +54,11 @@ Exit 1 means a decision changed or an expectation mismatched. Exit 2 means inval
 input or a file error. A new allowance still returns 1 even if its expected
 result was changed to Allow. A CI shell must preserve that nonzero status, for
 example with `set -e`, rather than treating a JSON report as a successful gate.
-No hosted CI, branch rules, repository or deployment settings are enabled here.
+The GitHub verification workflow runs on main pushes and pull requests, with
+a read-only repository token and no deployment step. It installs the recorded
+Python 3.10 dependencies and checksum-checked Chrome 156, then runs this gate.
+Merge safeguards are configured separately; a workflow file alone cannot
+prevent an untested merge.
 
 ## What the new checks establish
 
@@ -105,5 +109,5 @@ The clean-extracted full gate passed on November 11, 2026. See
 `verification/CLEAN-CHECKOUT-RESULTS.txt`. The test-client dependency emits a
 Starlette/httpx deprecation warning. That warning is not a failed assertion,
 but the dependency pair will need review before a future dependency update.
-No Vercel integration, hosted CI or automatic production deployment is
-configured by these files.
+The workflow does not configure Vercel, provider secrets or automatic
+production deployment.
