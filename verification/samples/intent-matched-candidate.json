@@ -1,0 +1,146 @@
+{
+  "schema_version": 1,
+  "policies": [
+    {
+      "client_id": "research-agent",
+      "allowed_scopes": [
+        "read:documents",
+        "write:summary",
+        "forbidden:probe"
+      ],
+      "allowed_audiences": [
+        "documents-api"
+      ],
+      "max_delegation_depth": 2,
+      "max_token_ttl": 300
+    }
+  ],
+  "cases": [
+    {
+      "name": "allow-at-limits",
+      "client_id": "research-agent",
+      "requested_scope": [
+        "read:documents",
+        "write:summary"
+      ],
+      "subject_scope": [
+        "read:documents",
+        "write:summary"
+      ],
+      "audience": "documents-api",
+      "delegation_depth": 2,
+      "requested_ttl": 300,
+      "expect_allowed": true
+    },
+    {
+      "name": "unknown-agent",
+      "client_id": "unregistered-agent",
+      "requested_scope": [
+        "read:documents",
+        "write:summary"
+      ],
+      "subject_scope": [
+        "read:documents",
+        "write:summary"
+      ],
+      "audience": "documents-api",
+      "delegation_depth": 2,
+      "requested_ttl": 300,
+      "expect_allowed": false
+    },
+    {
+      "name": "wrong-audience",
+      "client_id": "research-agent",
+      "requested_scope": [
+        "read:documents",
+        "write:summary"
+      ],
+      "subject_scope": [
+        "read:documents",
+        "write:summary"
+      ],
+      "audience": "other-api",
+      "delegation_depth": 2,
+      "requested_ttl": 300,
+      "expect_allowed": false
+    },
+    {
+      "name": "scope-widening",
+      "client_id": "research-agent",
+      "requested_scope": [
+        "read:documents",
+        "write:summary",
+        "forbidden:probe"
+      ],
+      "subject_scope": [
+        "read:documents",
+        "write:summary"
+      ],
+      "audience": "documents-api",
+      "delegation_depth": 2,
+      "requested_ttl": 300,
+      "expect_allowed": false
+    },
+    {
+      "name": "outside-policy",
+      "client_id": "research-agent",
+      "requested_scope": [
+        "forbidden:probe"
+      ],
+      "subject_scope": [
+        "read:documents",
+        "write:summary",
+        "forbidden:probe"
+      ],
+      "audience": "documents-api",
+      "delegation_depth": 2,
+      "requested_ttl": 300,
+      "expect_allowed": true
+    },
+    {
+      "name": "depth-exceeded",
+      "client_id": "research-agent",
+      "requested_scope": [
+        "read:documents",
+        "write:summary"
+      ],
+      "subject_scope": [
+        "read:documents",
+        "write:summary"
+      ],
+      "audience": "documents-api",
+      "delegation_depth": 3,
+      "requested_ttl": 300,
+      "expect_allowed": false
+    },
+    {
+      "name": "lifetime-exceeded",
+      "client_id": "research-agent",
+      "requested_scope": [
+        "read:documents",
+        "write:summary"
+      ],
+      "subject_scope": [
+        "read:documents",
+        "write:summary"
+      ],
+      "audience": "documents-api",
+      "delegation_depth": 2,
+      "requested_ttl": 301,
+      "expect_allowed": false
+    },
+    {
+      "name": "empty-scope",
+      "client_id": "research-agent",
+      "requested_scope": [],
+      "subject_scope": [
+        "read:documents",
+        "write:summary"
+      ],
+      "audience": "documents-api",
+      "delegation_depth": 2,
+      "requested_ttl": 300,
+      "expect_allowed": true
+    }
+  ]
+}

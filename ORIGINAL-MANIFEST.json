@@ -1,0 +1,188 @@
+[
+  {
+    "path": ".vercelignore",
+    "source_sha1": "580ed31ac1f8856046a20b9a893efdc3509ee804",
+    "sha256": "d9f8adf09740f6433435ab1ef875523cf971cd14f317e5dc3fe727ec514869e4",
+    "bytes": 74
+  },
+  {
+    "path": "README.md",
+    "source_sha1": "c17769b268860b6c35e2abf7d349a99b09942638",
+    "sha256": "bf1a1ce55a8ffc2117077d1d438f9837c2da88f2892b4a57cea8a3906b89695a",
+    "bytes": 26909
+  },
+  {
+    "path": "actas/__init__.py",
+    "source_sha1": "7313ea83fd947d462963587c0feffd57454a8aa7",
+    "sha256": "9c55ce1472b9cd64ca97dcd73ecf7943888a2b090d410b3003fb362df7a90ef6",
+    "bytes": 314
+  },
+  {
+    "path": "actas/app.py",
+    "source_sha1": "81a7496327844a673f40c3afc6a1df3e9a3b18fc",
+    "sha256": "d5a9302b2c66a2bc1c61bede7449b71293a4492dfdc37dbc594e08bb4736dc51",
+    "bytes": 21316
+  },
+  {
+    "path": "actas/audit.py",
+    "source_sha1": "4879f9d21bad86f42e6215a97c7a1aace26d19a8",
+    "sha256": "3b6aa004389cbf83d06595a783ba50b866690b1c605d7842af64e6ece1e61ff1",
+    "bytes": 3525
+  },
+  {
+    "path": "actas/clients.py",
+    "source_sha1": "07ab17961976d4c52509546c6f20826d6ddfff0a",
+    "sha256": "8bd7458cef55c9da6bf5e6bf56eb7ff59f45bfecd7ef7af703648f3394bff0ed",
+    "bytes": 4768
+  },
+  {
+    "path": "actas/demo_fixture.py",
+    "source_sha1": "483e807e6abab7106302bd5b18649824b9d555d6",
+    "sha256": "2e7758772281ce9c6939e347cd9ef095da5f2b9b4300ba867c0bfc02d2930128",
+    "bytes": 2142
+  },
+  {
+    "path": "actas/dpop.py",
+    "source_sha1": "66f9cf89c82925349af6d2e424fb0c593e3ea961",
+    "sha256": "f0dec1069419576ccc85aa8fa6051fe4e9ce81cd26e9f0ed1b5f201ff781f699",
+    "bytes": 11982
+  },
+  {
+    "path": "actas/errors.py",
+    "source_sha1": "ffc2f2e221015f3fd3d78771a11c6474403ef17d",
+    "sha256": "66c44b6c75a753b526b20c410b2b99d4c0533641b0c7b4e72244c6192c684fdd",
+    "bytes": 1184
+  },
+  {
+    "path": "actas/exchange.py",
+    "source_sha1": "658bcfac57bf5567423fbb6a2d7b67d6b62edb65",
+    "sha256": "d1bb26594915cb001592eb25b41d11d5019112c2c17aa0b9c48a52cd4b116e7f",
+    "bytes": 11170
+  },
+  {
+    "path": "actas/jwks_client.py",
+    "source_sha1": "e914350fc19aec4d1cc57fc53c6188af9b27175f",
+    "sha256": "e4ab6f88bc3bd570d1fe74b42c740cf111918e065ee7a1de57609631feee558b",
+    "bytes": 3518
+  },
+  {
+    "path": "actas/keys.py",
+    "source_sha1": "b4e7ff52beef95562c05e2f055e7302c25698467",
+    "sha256": "d62a9fc51de8c372228699531ae3e120ed8d78cd74fae2b4b7b752b0bd33614d",
+    "bytes": 4314
+  },
+  {
+    "path": "actas/lab.py",
+    "source_sha1": "56116a55a51415c4038b2d2313ec38dcd19c962f",
+    "sha256": "7a73709219d906170f8bf051fc60e437bcc67be13384266e356ee8b4f5c33cb5",
+    "bytes": 7795
+  },
+  {
+    "path": "actas/observability.py",
+    "source_sha1": "903dce09e8993edc706645df3bd300e4450f952d",
+    "sha256": "9eda785e7d750e1e8393709202cb376e907aefbd2e585ffa71576b31a64d7da5",
+    "bytes": 3788
+  },
+  {
+    "path": "actas/persist.py",
+    "source_sha1": "1a1e1681b1c2a8958fbebb9ae15944506b94bb39",
+    "sha256": "3cba3f82f529bb3fb56db287b1c5ea3692d91ecb512ca12fd2732d1b2e243c7d",
+    "bytes": 3959
+  },
+  {
+    "path": "actas/policy.py",
+    "source_sha1": "16372f35bace6ae0af2145b7c5d63e1244c5054a",
+    "sha256": "931e86cb8dde3ff33871125d3f9722ae6a019ee35da0c640b0edf5cbf21226d2",
+    "bytes": 2769
+  },
+  {
+    "path": "actas/register_client.py",
+    "source_sha1": "01b6d531b3dad2a92c8056f38850271424b30c1b",
+    "sha256": "a3d85e175bc024d5ae1bc865eacd4481cd1f824e45ebbeeb543188c868e02b67",
+    "bytes": 1948
+  },
+  {
+    "path": "actas/registry.py",
+    "source_sha1": "7487c4d2e3b2f0f23fb07394446936005b08e32c",
+    "sha256": "f625f9b39bfe1281874b7fa7e282f4d0f64961aa8db5ba9c4cd7b25c3d8948ec",
+    "bytes": 3389
+  },
+  {
+    "path": "actas/resource_server.py",
+    "source_sha1": "e87890245bf40940372e450472964813a58e2dad",
+    "sha256": "45e1f1c93a9a6352396bf3707ce0f9948c54cc7ceab596053073523ec2a51f0e",
+    "bytes": 4372
+  },
+  {
+    "path": "actas/rotate_key.py",
+    "source_sha1": "3c02b87132b80a900b28a82c4c1c735bd41804e5",
+    "sha256": "2e1aa18bdb94b05640bda47ad5498b502f2c57212cdd1447b1454067021e67f2",
+    "bytes": 2171
+  },
+  {
+    "path": "actas/scopes.py",
+    "source_sha1": "e45a3f625c8fcbdbe228198fc56a6645319e2592",
+    "sha256": "7f78c33c3b0b25ff7d3213ba6596cb00eb5ec66666f3bbb5b8f4b68c13df5355",
+    "bytes": 833
+  },
+  {
+    "path": "actas/snapshot.py",
+    "source_sha1": "df8c34657a6c36e8bfd8f4db6d42d07556a0d088",
+    "sha256": "9b42ad67621cd3127437c197ca3efe55d9e3b582ee341e1e7a6b4d0c595a11f5",
+    "bytes": 4505
+  },
+  {
+    "path": "actas/tokens.py",
+    "source_sha1": "08ed778079dccbb493cacf47a4fb9ced6a879f40",
+    "sha256": "e321366b77ff402d2a061b9d54f5c841dc45ec4c78bf84bbce687e842967ccca",
+    "bytes": 7070
+  },
+  {
+    "path": "actas/workbench.py",
+    "source_sha1": "90c4122cb55ca0e2247e6d4a6383ec8d13fdd8f4",
+    "sha256": "2e8c08c4f51df1d95a54bb0876ebccf3b19f0b9e1572f8d71c3353eaf2a96aa8",
+    "bytes": 8129
+  },
+  {
+    "path": "demo/index.html",
+    "source_sha1": "2e2f368ba2d28545d67565f160021fa756dfe8d8",
+    "sha256": "e02925fccc1f558970253a083000cc78875b9600575f54d5eaa0f249244e3731",
+    "bytes": 81508
+  },
+  {
+    "path": "examples/llmgate_fixture.py",
+    "source_sha1": "6db05acb18525ecb5262c6a6a70b33a3cc8f4960",
+    "sha256": "275a064df0eefee862dbbb1b17940a60ee12bbf0e039989f0c1cc6451664ebfe",
+    "bytes": 3474
+  },
+  {
+    "path": "examples/policy-pack.json",
+    "source_sha1": "e885a67d34a62afeca0dedd363fc4592d6b4415c",
+    "sha256": "a08409252dfa8fb94938cccd9c3154a2b0ebd3ec7d8fe73b9d5e191428c647c0",
+    "bytes": 3283
+  },
+  {
+    "path": "index.py",
+    "source_sha1": "ae7fdb139c143c143de937960a0691411d36ecd9",
+    "sha256": "6b59db541d5211e346879db04117135fe3d2120e7568d511dd609d5674da456a",
+    "bytes": 257
+  },
+  {
+    "path": "pyproject.toml",
+    "source_sha1": "7198951d811cee618649e3625791ff69fd836bd9",
+    "sha256": "8abce541cf069ec7187ce3446110c378ed60a15cdd315d7ccb6f3c2c00ae9462",
+    "bytes": 671
+  },
+  {
+    "path": "requirements.txt",
+    "source_sha1": "acdb2b64a006c90c850ff745781beee8d85d2b2d",
+    "sha256": "834c502ae92c491ec679ede3ba41d2b4b716b0f1dbc9bed62d4f69d8a08c8aae",
+    "bytes": 81
+  },
+  {
+    "path": "vercel.json",
+    "source_sha1": "9aa93649df5e52fad7e07272913ba5a75633e0af",
+    "sha256": "4bf1bc808055cf581558f7eccd2493033d0a599c363383883a5fa1b31731e159",
+    "bytes": 119
+  }
+]

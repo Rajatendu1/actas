@@ -1,0 +1,9 @@
+{
+  "README.txt": "563bb774510c7ea2c883e47c494b0c440a62f9b9b1dac8cd602f8b465dda0a64",
+  "actas-policy-comparison.json": "a329cc13edce770ee3a5a284d17bf7001e9ee1dcd009b9ad28320f2475c1d630",
+  "actas-policy-pack.json": "a08409252dfa8fb94938cccd9c3154a2b0ebd3ec7d8fe73b9d5e191428c647c0",
+  "baseline.json": "e905cb1a93ed512786def2d7a98a2d015bf634d838905a3c73c9ad9e8b193337",
+  "candidate.json": "7656e25aa03ddef3ad37e2072d4191d371afb2f77c2d7ad304160908d0c28d6b",
+  "intent-matched-candidate.json": "8dbc0387dd5d6a12ffee0e17b368372f6ad71305348b4ab1dd4066be7d04d58e",
+  "intent-matched-comparison.json": "4e49ad1458887f3108e8f88194328a8db2102f83de1c3358d85121a69bf0b545"
+}

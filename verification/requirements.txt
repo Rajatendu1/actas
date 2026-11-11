@@ -1,0 +1,2 @@
+# New recovery browser dependency, not the lost target hash lock.
+websocket-client==1.9.2

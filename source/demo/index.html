@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>actas - delegation tokens for AI agents</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  color-scheme: dark;
+  --bg: #0a0e14;
+  --panel: rgba(255,255,255,.04);
+  --panel-2: rgba(255,255,255,.06);
+  --line: rgba(255,255,255,.08);
+  --line-strong: rgba(255,255,255,.14);
+  --ink: #e8eef5;
+  --ink-2: #9aa7b8;
+  --teal: #5eead4;
+  --teal-deep: #2dd4bf;
+  --teal-dim: rgba(94,234,212,.10);
+  --teal-line: rgba(94,234,212,.28);
+  --amber: #fbbf24;
+  --amber-dim: rgba(251,191,36,.08);
+  --amber-line: rgba(251,191,36,.32);
+  --red: #f87171;
+  --red-dim: rgba(248,113,113,.07);
+  --red-line: rgba(248,113,113,.32);
+  --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+.wrap { max-width: 920px; margin: 0 auto; padding: 0 24px 110px; }
+
+/* ---------- hero ---------- */
+header.hero { position: relative; padding: 48px 0 56px; }
+header.hero::before {
+  content: ""; position: absolute; inset: -60px 0 0; pointer-events: none;
+  background:
+    radial-gradient(620px 340px at 12% -4%, rgba(94,234,212,.15), transparent 62%),
+    radial-gradient(720px 400px at 88% 6%, rgba(99,102,241,.13), transparent 62%),
+    radial-gradient(520px 300px at 55% 105%, rgba(251,191,36,.05), transparent 60%);
+}
+header.hero::after {
+  content: ""; position: absolute; inset: -60px 0 0; pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px);
+  background-size: 44px 44px;
+  -webkit-mask-image: radial-gradient(ellipse 90% 80% at 50% 0%, black 15%, transparent 78%);
+          mask-image: radial-gradient(ellipse 90% 80% at 50% 0%, black 15%, transparent 78%);
+}
+header.hero > * { position: relative; z-index: 1; }
+header.hero > svg.grain { position: absolute; inset: 0; width: 100%; height: 100%; opacity: .05; mix-blend-mode: overlay; pointer-events: none; z-index: 0; }
+.eyebrow {
+  font-family: var(--mono); font-size: 12px; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--teal); margin-bottom: 16px;
+}
+h1 {
+  font-size: clamp(46px, 8vw, 76px); font-weight: 800; letter-spacing: -0.045em; line-height: 1.02;
+  margin-bottom: 18px;
+  background: linear-gradient(115deg, #f4f8fc 35%, var(--teal) 90%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.lede { color: var(--ink-2); font-size: 18px; max-width: 620px; }
+.lede b { color: var(--ink); font-weight: 600; }
+.cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+.btn-primary {
+  display: inline-block; font-family: var(--sans); font-size: 15px; font-weight: 600;
+  background: var(--teal); color: #06251f; border-radius: 10px; padding: 13px 24px;
+  text-decoration: none; transition: box-shadow .18s ease, transform .18s ease;
+}
+.btn-primary:hover { box-shadow: 0 0 0 1px rgba(94,234,212,.5), 0 6px 28px rgba(94,234,212,.28); transform: translateY(-1px); }
+.btn-ghost {
+  display: inline-block; font-size: 15px; font-weight: 500; color: var(--ink);
+  border: 1px solid var(--line-strong); border-radius: 10px; padding: 13px 22px;
+  text-decoration: none; transition: border-color .18s ease, background .18s ease;
+}
+.btn-ghost:hover { border-color: var(--teal-line); background: var(--teal-dim); }
+
+/* ---------- hero diagram ---------- */
+.hero-diagram {
+  margin-top: 40px;
+  display: grid; grid-template-columns: minmax(0,1fr) 72px minmax(0,1fr) 72px minmax(0,1fr);
+  align-items: stretch;
+}
+.hd-node {
+  background: var(--panel); border: 1px solid var(--line); border-radius: 14px;
+  padding: 16px 18px; position: relative;
+  box-shadow: 0 10px 34px rgba(0,0,0,.4);
+}
+.hd-node.hd-user { border-color: var(--amber-line); box-shadow: 0 0 28px rgba(251,191,36,.10), 0 10px 34px rgba(0,0,0,.4); }
+.hd-node.hd-grant { border-color: var(--teal-line); box-shadow: 0 0 28px rgba(94,234,212,.10), 0 10px 34px rgba(0,0,0,.4); }
+.hd-name { font-weight: 600; font-size: 15px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.hd-role { font-size: 12.5px; color: var(--ink-2); margin-top: 2px; }
+.hd-tag {
+  font-family: var(--mono); font-size: 9.5px; letter-spacing: .08em; text-transform: uppercase;
+  padding: 2px 8px; border-radius: 999px;
+}
+.tag-amber { color: var(--amber); background: var(--amber-dim); border: 1px solid var(--amber-line); }
+.tag-teal { color: var(--teal); background: var(--teal-dim); border: 1px solid var(--teal-line); }
+.hd-node .chips { margin-top: 12px; }
+.hd-ttl { font-family: var(--mono); font-size: 10.5px; color: var(--ink-2); margin-top: 10px; }
+.hd-edge { position: relative; align-self: center; height: 2px; margin: 0 6px;
+  background: linear-gradient(90deg, rgba(251,191,36,.65), rgba(94,234,212,.65)); }
+.hd-edge.e2 { background: linear-gradient(90deg, rgba(94,234,212,.55), rgba(94,234,212,.85)); }
+.hd-edge::before {
+  content: ""; position: absolute; inset: 0;
+  background: repeating-linear-gradient(90deg, rgba(232,238,245,.9) 0 4px, transparent 4px 11px);
+  opacity: .5; animation: flowX 1.1s linear infinite;
+}
+.hd-edge::after {
+  content: ""; position: absolute; right: -1px; top: 50%; transform: translateY(-50%);
+  border-left: 8px solid rgba(94,234,212,.9); border-top: 5px solid transparent; border-bottom: 5px solid transparent;
+}
+.hd-edge-label {
+  position: absolute; top: -22px; left: 50%; transform: translateX(-50%);
+  font-family: var(--mono); font-size: 9.5px; letter-spacing: .04em; color: var(--ink-2); white-space: nowrap;
+}
+@keyframes flowX { to { background-position-x: 11px; } }
+@keyframes flowY { to { background-position-y: 11px; } }
+.hd-refuse {
+  grid-column: 3; grid-row: 2; margin-top: 40px; position: relative;
+  background: var(--red-dim); border: 1px solid var(--red-line); border-radius: 12px;
+  padding: 12px 16px; font-size: 13px; color: var(--ink);
+  box-shadow: 0 0 24px rgba(248,113,113,.08);
+}
+.hd-refuse::before {
+  content: ""; position: absolute; left: 50%; top: -40px; height: 40px;
+  border-left: 2px dashed rgba(248,113,113,.55);
+}
+.hd-refuse .hd-x { color: var(--red); font-weight: 700; margin-right: 6px; }
+.hd-refuse code { font-family: var(--mono); font-size: 12px; color: var(--red); }
+.hd-refuse b { color: var(--red); }
+.hd-refuse-sub { display: block; font-family: var(--mono); font-size: 10.5px; color: var(--ink-2); margin-top: 4px; }
+
+/* ---------- legend ---------- */
+.legend { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 22px; font-family: var(--mono); font-size: 11px; color: var(--ink-2); align-items: center; }
+.legend .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 7px; vertical-align: 1px; }
+.dot.d-amber { background: var(--amber); box-shadow: 0 0 8px rgba(251,191,36,.7); }
+.dot.d-teal { background: var(--teal); box-shadow: 0 0 8px rgba(94,234,212,.7); }
+.dot.d-red { background: var(--red); box-shadow: 0 0 8px rgba(248,113,113,.7); }
+.dot.d-gray { background: #5b6673; }
+.chip.sm { font-size: 10px; padding: 1px 7px; margin-right: 6px; }
+
+/* ---------- sections ---------- */
+.section { margin-top: 72px; }
+.section-label {
+  font-family: var(--mono); font-size: 12px; letter-spacing: .12em;
+  text-transform: uppercase; color: rgba(94,234,212,.85); margin-bottom: 18px;
+  display: flex; align-items: center; gap: 12px;
+}
+.section-label::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, var(--line-strong), transparent); }
+.section-sub { color: var(--ink-2); font-size: 14.5px; max-width: 640px; margin-bottom: 18px; }
+
+/* scroll reveal (JS-gated, no-JS stays visible) */
+.reveal { opacity: 0; transform: translateY(14px); transition: opacity .55s ease, transform .55s ease; }
+.reveal.in { opacity: 1; transform: none; }
+
+/* ---------- buttons ---------- */
+button.run {
+  font-family: var(--sans); font-size: 15px; font-weight: 600;
+  background: var(--teal); color: #06251f; border: 0; border-radius: 10px;
+  padding: 13px 24px; cursor: pointer; transition: box-shadow .18s ease, transform .18s ease;
+}
+button.run:hover { box-shadow: 0 0 0 1px rgba(94,234,212,.5), 0 6px 28px rgba(94,234,212,.28); transform: translateY(-1px); }
+button.run:disabled { opacity: .55; cursor: wait; transform: none; box-shadow: none; }
+.run-note { font-size: 13px; color: var(--ink-2); margin-top: 10px; }
+
+/* ---------- cards ---------- */
+.cards { display: grid; gap: 14px; }
+@media (min-width: 760px) { .cards { grid-template-columns: repeat(3, 1fr); } }
+.card {
+  background: var(--panel); border: 1px solid var(--line); border-radius: 14px;
+  padding: 18px 20px; display: grid; gap: 8px; font-size: 14px; align-content: start;
+  transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+}
+.card:hover { transform: translateY(-2px); border-color: var(--teal-line); box-shadow: 0 10px 30px rgba(0,0,0,.35), 0 0 20px rgba(94,234,212,.06); }
+.card b { font-size: 15px; }
+.card span { color: var(--ink-2); }
+.card .card-ico { color: var(--teal); margin-bottom: 2px; }
+.card .card-head { display: flex; align-items: center; gap: 8px; }
+.status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+.status-dot.ok { background: var(--teal); box-shadow: 0 0 10px rgba(94,234,212,.8); animation: pulse 2.2s ease-in-out infinite; }
+.status-dot.warn { background: var(--amber); box-shadow: 0 0 10px rgba(251,191,36,.7); }
+.status-dot.off { background: #5b6673; }
+@keyframes pulse { 50% { opacity: .45; } }
+
+/* ---------- delegation chain (story) ---------- */
+.chain { display: flex; flex-direction: column; gap: 0; margin-top: 24px; }
+.chain > * { animation: rise .4s both; }
+.chain > *:nth-child(2) { animation-delay: .06s; }
+.chain > *:nth-child(3) { animation-delay: .12s; }
+.chain > *:nth-child(4) { animation-delay: .18s; }
+.chain > *:nth-child(5) { animation-delay: .24s; }
+.chain > *:nth-child(n+6) { animation-delay: .3s; }
+@keyframes rise { from { opacity: 0; transform: translateY(10px); } }
+.hop {
+  background: var(--panel); border: 1px solid var(--teal-line);
+  border-radius: 14px; padding: 18px 20px; position: relative;
+  box-shadow: 0 0 24px rgba(94,234,212,.05), 0 8px 28px rgba(0,0,0,.3);
+}
+.hop + .hop { margin-top: 30px; }
+.hop + .hop::before {
+  content: ""; position: absolute; top: -30px; left: 32px;
+  width: 2px; height: 30px; background: linear-gradient(180deg, rgba(94,234,212,.5), rgba(94,234,212,.12));
+}
+.hop + .hop::after {
+  content: "▼"; position: absolute; top: -24px; left: 26.5px;
+  font-size: 10px; color: var(--teal);
+}
+.hop.denied { background: var(--red-dim); border-color: var(--red-line); box-shadow: 0 0 24px rgba(248,113,113,.06); }
+.hop-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.hop-title { font-weight: 600; font-size: 15px; }
+.hop-num { font-family: var(--mono); font-size: 12px; color: var(--ink-2); }
+.claims { margin-top: 12px; display: grid; gap: 6px; }
+.claim { display: flex; gap: 10px; font-size: 13px; align-items: baseline; }
+.claim kbd {
+  font-family: var(--mono); font-size: 11px; color: var(--ink-2);
+  min-width: 56px; background: none; border: 0; padding: 0;
+}
+.claim code { font-family: var(--mono); font-size: 12.5px; word-break: break-all; color: #c3cedd; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.chip {
+  font-family: var(--mono); font-size: 11.5px; padding: 3px 9px;
+  border-radius: 999px; background: var(--teal-dim); color: var(--teal);
+  border: 1px solid var(--teal-line);
+}
+.chip.lost { background: rgba(255,255,255,.04); color: var(--ink-2); text-decoration: line-through; border-color: var(--line); }
+.crumb { font-family: var(--mono); font-size: 12px; color: var(--ink-2); margin-top: 10px; }
+.crumb b { color: var(--ink); font-weight: 600; }
+.denied-reason { font-family: var(--mono); font-size: 12.5px; color: var(--red); margin-top: 8px; }
+
+/* ---------- scope funnel ---------- */
+.funnel { margin-top: 20px; display: grid; gap: 8px; }
+.funnel-row { display: flex; align-items: center; gap: 12px; }
+.funnel-label {
+  font-family: var(--mono); font-size: 11px; color: var(--ink-2);
+  width: 148px; flex-shrink: 0; text-align: right;
+}
+.funnel-bar { display: flex; gap: 4px; flex: 1; }
+.seg {
+  height: 22px; border-radius: 5px; background: linear-gradient(90deg, var(--teal-deep), var(--teal));
+  flex: 1; min-width: 18px; position: relative; transition: opacity .2s;
+  box-shadow: 0 0 10px rgba(94,234,212,.18);
+}
+.seg span {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 10px; color: #06251f; font-weight: 600; white-space: nowrap; overflow: hidden;
+}
+.seg.lost { background: repeating-linear-gradient(45deg, rgba(255,255,255,.05), rgba(255,255,255,.05) 4px, rgba(255,255,255,.02) 4px, rgba(255,255,255,.02) 8px); border: 1px dashed var(--line-strong); box-shadow: none; }
+.seg.lost span { color: var(--ink-2); text-decoration: line-through; font-weight: 400; }
+
+/* ---------- proof-of-possession outcomes ---------- */
+.pop { margin-top: 12px; display: grid; gap: 6px; }
+.pop-row { display: flex; gap: 10px; align-items: baseline; font-size: 13px; }
+.pop-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; align-self: center; }
+.pop-dot.ok { background: var(--teal); box-shadow: 0 0 8px rgba(94,234,212,.7); }
+.pop-dot.no { background: var(--red); box-shadow: 0 0 8px rgba(248,113,113,.7); }
+.pop-row code { font-family: var(--mono); font-size: 12px; color: var(--ink-2); }
+
+/* ---------- technical details accordion ---------- */
+details.tech { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 4px 22px 22px; }
+details.tech > summary {
+  cursor: pointer; padding: 16px 0; font-weight: 600; font-size: 15px; color: var(--ink);
+  transition: color .15s ease;
+}
+details.tech > summary:hover { color: var(--teal); }
+details.tech .section { margin-top: 40px; }
+
+/* ---------- policy lab ---------- */
+.lab {
+  background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 22px;
+  box-shadow: 0 12px 40px rgba(0,0,0,.35);
+}
+.lab h3 { font-size: 12px; font-family: var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-2); font-weight: 500; margin: 0 0 8px; }
+.lab-head { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+.lab-live { display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 11px; color: var(--teal); }
+.lab-grid { display: grid; gap: 14px; margin-top: 16px; }
+.lab-row { border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; background: rgba(255,255,255,.02); }
+.lab-row.off { opacity: .45; }
+.lab-line { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; margin-top: 8px; }
+.lab label.ck { display: inline-flex; gap: 6px; align-items: center; font-family: var(--mono); font-size: 12px; color: var(--ink); margin: 0; cursor: pointer; }
+.lab input[type="checkbox"] { accent-color: var(--teal); }
+.lab select {
+  font-family: var(--mono); font-size: 12.5px; padding: 6px 8px; border: 1px solid var(--line-strong);
+  border-radius: 8px; background: #0d1420; color: var(--ink);
+}
+.lab select:focus { outline: none; border-color: var(--teal); }
+.presets { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+.presets button {
+  font-family: var(--mono); font-size: 12px; padding: 7px 14px; border-radius: 999px;
+  border: 1px solid var(--line-strong); background: var(--panel); cursor: pointer; color: var(--ink);
+  transition: border-color .15s ease, color .15s ease, background .15s ease;
+}
+.presets button:hover { border-color: var(--teal); color: var(--teal); }
+.presets button.active { border-color: var(--teal); color: var(--teal); background: var(--teal-dim); box-shadow: 0 0 14px rgba(94,234,212,.12); }
+.lab-out { margin-top: 20px; display: flex; flex-direction: column; gap: 0; }
+.lab-out > * { animation: rise .35s both; }
+.lab-out > *:nth-child(2) { animation-delay: .05s; }
+.lab-out > *:nth-child(3) { animation-delay: .1s; }
+.lab-out > *:nth-child(4) { animation-delay: .15s; }
+.lab-out > *:nth-child(5) { animation-delay: .2s; }
+.lab-out > *:nth-child(6) { animation-delay: .25s; }
+.lab-out > *:nth-child(7) { animation-delay: .3s; }
+.lab-out > *:nth-child(n+8) { animation-delay: .35s; }
+.node {
+  border: 1px solid var(--teal-line); border-radius: 12px; padding: 13px 16px 13px 19px;
+  background: var(--panel); position: relative; overflow: hidden;
+  box-shadow: 0 6px 22px rgba(0,0,0,.3);
+}
+.node::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: linear-gradient(180deg, var(--teal), var(--teal-deep)); }
+.node.bad { background: var(--red-dim); border-color: var(--red-line); }
+.node.bad::before { background: var(--red); }
+.node.revoked { background: var(--amber-dim); border-color: var(--amber-line); }
+.node.revoked::before { background: var(--amber); }
+.node.revoked .denied-reason { color: var(--amber); }
+.node.skip { opacity: .45; border-style: dashed; }
+.node.skip::before { background: transparent; }
+.node .who { font-weight: 600; font-size: 14px; }
+.node .meta { font-family: var(--mono); font-size: 11.5px; color: var(--ink-2); margin-top: 4px; }
+.arrow {
+  height: 26px; width: 2px; margin-left: 30px;
+  background: linear-gradient(180deg, rgba(94,234,212,.55), rgba(94,234,212,.12));
+}
+.verdicts { display: grid; gap: 6px; margin-top: 6px; }
+.verdict { display: flex; gap: 10px; align-items: baseline; font-size: 13px; }
+.verdict .why { font-family: var(--mono); font-size: 11.5px; color: var(--ink-2); }
+@media (min-width: 760px) { .lab-grid.cols { grid-template-columns: 1fr 1fr; } }
+
+/* ---------- audit ---------- */
+.audit-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
+.badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--mono); font-size: 12px; padding: 5px 14px;
+  border-radius: 999px; background: var(--teal-dim); color: var(--teal);
+  border: 1px solid var(--teal-line);
+}
+.badge::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--teal); box-shadow: 0 0 8px rgba(94,234,212,.8); animation: pulse 2.2s ease-in-out infinite; }
+.badge.bad { background: var(--red-dim); color: var(--red); border-color: var(--red-line); }
+.badge.bad::before { background: var(--red); box-shadow: 0 0 8px rgba(248,113,113,.8); animation: none; }
+.head-hash { font-family: var(--mono); font-size: 11px; color: var(--ink-2); word-break: break-all; }
+.log-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; background: rgba(255,255,255,.02); }
+table.log { width: 100%; border-collapse: collapse; font-size: 12.5px; min-width: 480px; }
+table.log th, table.log td {
+  text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line);
+  font-family: var(--mono); font-size: 11.5px; vertical-align: top;
+}
+table.log tr:last-child td { border-bottom: 0; }
+table.log th { color: var(--ink-2); font-weight: 500; text-transform: uppercase; letter-spacing: .06em; font-size: 10px; }
+td.granted { color: var(--teal); }
+td.denied { color: var(--red); }
+
+/* ---------- try it ---------- */
+.try {
+  background: var(--panel); border: 1px solid var(--line);
+  border-radius: 14px; padding: 20px;
+}
+.try-row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+.try label { font-size: 11px; color: var(--ink-2); display: block; margin-bottom: 5px; font-family: var(--mono); text-transform: uppercase; letter-spacing: .06em; }
+.try input, .try select {
+  font-family: var(--mono); font-size: 13px; padding: 9px 11px;
+  border: 1px solid var(--line-strong); border-radius: 8px; background: #0d1420; color: var(--ink);
+}
+.try input:focus, .try select:focus { outline: none; border-color: var(--teal); }
+.try input { width: 220px; }
+pre.result, pre.curl {
+  font-family: var(--mono); font-size: 12px; background: #0c1119; color: #c9d4e2;
+  border: 1px solid var(--line);
+  padding: 14px 16px; border-radius: 10px; overflow-x: auto; white-space: pre-wrap; word-break: break-all;
+}
+pre.curl { margin-top: 12px; }
+
+/* ---------- note & footer ---------- */
+.note {
+  margin-top: 64px; padding: 18px 20px; border: 1px solid var(--line);
+  border-radius: 14px; background: var(--panel); font-size: 13.5px; color: var(--ink-2);
+}
+.note b { color: var(--ink); }
+footer { margin-top: 40px; font-size: 12.5px; color: var(--ink-2); font-family: var(--mono); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+
+/* ---------- mobile ---------- */
+@media (max-width: 720px) {
+  header.hero { padding: 32px 0 40px; }
+  h1 { font-size: clamp(38px, 11vw, 46px); margin-bottom: 12px; }
+  .lede { font-size: 16px; }
+  .cta-row { margin-top: 20px; }
+  .hero-diagram { display: flex; flex-direction: column; gap: 0; margin-top: 28px; }
+  .hd-node { margin: 0; padding: 10px 16px; }
+  .hd-ttl { margin-top: 6px; }
+  .hd-node .chips { margin-top: 8px; }
+  .hd-edge { width: 2px; height: 28px; margin: 0; align-self: center;
+    background: linear-gradient(180deg, rgba(251,191,36,.65), rgba(94,234,212,.65)); }
+  .hd-edge.e2 { background: linear-gradient(180deg, rgba(94,234,212,.55), rgba(94,234,212,.85)); }
+  .hd-edge::before { background: repeating-linear-gradient(180deg, rgba(232,238,245,.9) 0 4px, transparent 4px 11px); animation: flowY 1.1s linear infinite; }
+  .hd-edge::after { right: auto; left: 50%; top: auto; bottom: -1px; transform: translateX(-50%);
+    border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 8px solid rgba(94,234,212,.9); border-bottom: 0; }
+  .hd-edge-label { top: 50%; left: 14px; transform: translateY(-50%); }
+  .hd-refuse { grid-column: auto; grid-row: auto; margin: 16px 0 8px; }
+  .hd-refuse::before { left: 50%; top: -16px; height: 16px; }
+  .hero-diagram > :nth-of-type(1) { order: 1; }
+  .hero-diagram > :nth-of-type(2) { order: 2; }
+  .hero-diagram > :nth-of-type(3) { order: 3; }
+  .hero-diagram > :nth-of-type(6) { order: 4; }
+  .hero-diagram > :nth-of-type(4) { order: 5; }
+  .hero-diagram > :nth-of-type(5) { order: 6; }
+}
+@media (max-width: 560px) {
+  .claim kbd { min-width: 44px; }
+  .try input { width: 100%; }
+  .funnel-label { width: 88px; font-size: 10px; }
+  .seg { min-width: 0; }
+  .seg span { display: none; }
+}
+
+/* ---------- reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .hd-edge::before, .status-dot.ok, .badge::before { animation: none; }
+  .chain > *, .lab-out > * { animation: none; }
+  .reveal { opacity: 1; transform: none; transition: none; }
+  .btn-primary, .btn-ghost, .card, button.run { transition: none; }
+}
+.wb-candidate {margin:20px 0;padding:18px;border:1px solid var(--line-strong);border-radius:12px}
+.wb-candidate h3 {margin:0;font-size:16px}
+.wb-candidate input:disabled,.wb-candidate select:disabled {opacity:.5}
+/* Policy workbench: usable on a phone without a wide table. */
+.wb-form {display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.wb-form label {display:flex;flex-direction:column;gap:6px;font-size:14px;color:var(--ink)}
+.wb-form small {color:var(--ink-2)}
+.wb-wide {grid-column:1/-1}
+.wb-form input,.wb-form select,.wb-editor textarea {width:100%;box-sizing:border-box;background:var(--bg);border:1px solid var(--line-strong);border-radius:8px;color:var(--ink);padding:12px;font:13px var(--mono);min-width:0}
+.wb-form input:focus,.wb-editor textarea:focus {outline:2px solid var(--teal);outline-offset:2px}
+.wb-actions {display:flex;flex-wrap:wrap;gap:10px;margin:20px 0}
+.wb-actions button {cursor:pointer;font-family:var(--sans)}
+.wb-actions .btn-ghost {background:transparent;color:var(--ink)}
+.wb-import:focus-within {outline:2px solid var(--teal);outline-offset:2px}
+.wb-actions button:disabled {opacity:.45;cursor:not-allowed}
+.wb-import {position:relative;overflow:hidden;cursor:pointer}
+.wb-import input {position:absolute;inset:0;opacity:0;width:100%;cursor:pointer}
+.wb-editor {border-top:1px solid var(--line);padding-top:16px}
+.wb-editor summary {cursor:pointer;color:var(--teal)}
+.wb-editor p,.wb-boundary {font-size:13px;color:var(--ink-2);line-height:1.7}
+.wb-editor textarea {margin-top:8px;resize:vertical;line-height:1.6}
+#wbStatus {font:14px var(--mono);overflow-wrap:anywhere}
+.wb-results {display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.wb-result {border:1px solid var(--teal-line);background:var(--teal-dim);padding:14px;border-radius:10px;min-width:0;overflow-wrap:anywhere}
+.wb-result.mismatch {border-color:var(--red-line);background:var(--red-dim)}
+.wb-result strong {font:12px var(--mono);color:var(--teal)}
+.wb-result.mismatch strong {color:var(--red)}
+.wb-result p {margin:7px 0 0;font-size:13px;color:var(--ink-2)}
+.wb-sr {position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+@media(max-width:600px){.wb-form,.wb-results{grid-template-columns:1fr}.wb-actions button,.wb-import{width:100%;text-align:center}.wb-editor textarea{font-size:12px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <svg class="grain" aria-hidden="true"><filter id="gr"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter><rect width="100%" height="100%" filter="url(#gr)"/></svg>
+    <p class="eyebrow">A small, working permissions system for AI agents</p>
+    <h1>actas</h1>
+    <p class="lede">When an AI agent works for you, what stops it from doing more than you allowed? Actas gives each agent a pass that <b>can only get smaller</b> as work is handed on, <b>runs out quickly</b>, and <b>leaves a record</b> of who did what.</p>
+    <div class="cta-row">
+      <a class="btn-primary" href="#workbench">Try it yourself</a>
+      <a class="btn-ghost" href="#problem">Read the idea</a>
+    </div>
+
+    <div class="hero-diagram" role="img" aria-label="Asha grants read calendar, write notes and read profile to her assistant planner-bot. Planner-bot keeps only read calendar and write notes, and delegates just read calendar to summarizer-tool. When planner-bot asks for admin:all, the exchange is refused.">
+      <div class="hd-node hd-user">
+        <div class="hd-name">Asha <span class="hd-tag tag-amber">upstream</span></div>
+        <div class="hd-role">grants access to her assistant</div>
+        <div class="chips"><span class="chip">read:calendar</span><span class="chip">write:notes</span><span class="chip">read:profile</span></div>
+        <div class="hd-ttl">runs out in 600s</div>
+      </div>
+      <div class="hd-edge e1"><span class="hd-edge-label">delegates, narrowed</span></div>
+      <div class="hd-node hd-grant">
+        <div class="hd-name">planner-bot <span class="hd-tag tag-teal">token</span></div>
+        <div class="hd-role">her assistant</div>
+        <div class="chips"><span class="chip">read:calendar</span><span class="chip">write:notes</span><span class="chip lost">read:profile</span></div>
+        <div class="hd-ttl">runs out in 300s</div>
+      </div>
+      <div class="hd-edge e2"><span class="hd-edge-label">delegates, narrowed</span></div>
+      <div class="hd-node hd-grant">
+        <div class="hd-name">summarizer-tool <span class="hd-tag tag-teal">token</span></div>
+        <div class="hd-role">a helper it hands work to</div>
+        <div class="chips"><span class="chip">read:calendar</span><span class="chip lost">write:notes</span><span class="chip lost">read:profile</span></div>
+        <div class="hd-ttl">runs out in 300s</div>
+      </div>
+      <div class="hd-refuse"><span class="hd-x">✕</span>planner-bot asks for <code>admin:all</code> → <b>refused</b><span class="hd-refuse-sub">widening is denied, never trimmed to fit</span></div>
+    </div>
+
+    <div class="legend">
+      <span><i class="dot d-amber"></i>the owner's side (grant · revoke)</span>
+      <span><i class="dot d-teal"></i>granted</span>
+      <span><i class="dot d-red"></i>refused</span>
+      <span><span class="chip lost sm">scope</span>lost at this hop</span>
+    </div>
+    <p class="run-note" style="margin-top:18px">The fictional lab runs live token exchanges. The policy workbench checks your own configuration against the same policy engine. Neither uses pre-recorded results.</p>
+  </header>
+
+  <section class="section" id="workbench">
+    <p class="section-label">Use it for your own project</p>
+    <h2>Build a policy. Catch a bad grant.</h2>
+    <p class="section-sub">Design an agent's permissions, check the boundary cases, and take a regression pack back to your project. These are live decisions from Actas's policy engine, not a token decoder or a pretend approval.</p>
+    <div class="lab">
+      <p class="wb-boundary" id="wbInputNotice"><strong>Use non-sensitive examples only.</strong> Running checks or comparisons sends your pack to this server for in-memory processing. Do not enter tokens, credentials or confidential configuration. Downloads stay on your device.</p>
+      <p style="font-size:13px;color:var(--ink-2);margin-top:0">Use this builder to create a new pack. Import and JSON edits use the pack below; they do not fill this form.</p>
+      <div class="wb-form">
+        <label>Agent ID<input id="wbClient" value="research-agent" maxlength="128"></label>
+        <label>Audience<input id="wbAudience" value="documents-api" maxlength="128"></label>
+        <label class="wb-wide">Allowed scopes <small>space-separated identifiers</small><input id="wbScopes" value="read:documents write:summary" maxlength="2048"></label>
+        <label>Maximum depth<input id="wbDepth" type="number" min="1" max="16" value="2"></label>
+        <label>Maximum lifetime (seconds)<input id="wbTtl" type="number" min="1" max="86400" value="300"></label>
+      </div>
+      <div class="wb-actions"><button id="wbGenerate" class="btn-primary">Build 8 boundary cases</button><label class="btn-ghost wb-import">Import pack<input id="wbImport" type="file" accept=".json,application/json"></label></div>
+      <details class="wb-editor" id="wbCasePanel"><summary>Add or edit a test request without JSON</summary>
+        <p>Write a request you want to allow or refuse. Expectations are your intent, not a suggestion from the engine. Only these cases are tested; passing them is not a safety guarantee.</p>
+        <div class="wb-actions"><button id="wbCaseLoad" class="btn-ghost">Load cases from current pack</button></div>
+        <div class="wb-form">
+          <label class="wb-wide">Case to edit<select id="wbCaseSelect" disabled></select></label>
+          <label>Case name<input id="wbCaseName" disabled maxlength="128"></label>
+          <label>Requesting agent<input id="wbCaseClient" disabled maxlength="128"></label>
+          <label class="wb-wide">Requested scopes <small>space-separated; blank means none</small><input id="wbCaseRequested" disabled maxlength="4096"></label>
+          <label class="wb-wide">Subject scopes <small>what the previous hop already holds</small><input id="wbCaseSubject" disabled maxlength="4096"></label>
+          <label>Audience<input id="wbCaseAudience" disabled maxlength="128"></label>
+          <label>Expected decision<select id="wbCaseExpected" disabled><option value="false">Deny</option><option value="true">Allow</option></select></label>
+          <label>Delegation depth<input id="wbCaseDepth" disabled type="number" min="1" max="17"></label>
+          <label>Requested lifetime (seconds)<input id="wbCaseTtl" disabled type="number" min="1" max="86401"></label>
+        </div>
+        <div class="wb-actions"><button id="wbCaseApply" class="btn-primary" disabled>Apply case</button><button id="wbCaseDiscard" class="btn-ghost" disabled>Discard unapplied case edit</button></div>
+        <p id="wbCaseStatus" role="status" aria-live="polite">Load the current pack before editing a case. Changes stay in this tab until downloaded.</p>
+      </details>
+      <details class="wb-editor"><summary>Edit configuration and test cases (JSON)</summary>
+        <p>Change a case's <code>expect_allowed</code> to assert your intended rule. Up to 8 agents and 64 cases. Exact schema required; unknown or repeated fields are rejected.</p>
+        <label for="wbPack" class="wb-sr">Policy regression pack</label><textarea id="wbPack" spellcheck="false" rows="15" maxlength="65536"></textarea>
+      </details>
+      <div class="wb-actions"><button id="wbRun" class="btn-primary">Run policy checks</button><button id="wbSave" class="btn-ghost">Download pack</button><button id="wbReport" class="btn-ghost" disabled>Download report</button></div>
+      <p id="wbStatus" role="status" aria-live="polite">Build a pack to begin.</p>
+      <div id="wbResults" class="wb-results"></div>
+      <details class="wb-editor" id="wbComparePanel"><summary>Compare a proposed policy change</summary>
+        <p>Keep a baseline, then edit the policy in the JSON pack above. Compare runs the candidate's exact cases under both policies, even if the saved baseline had different cases. A new allowance is a change to review, not automatically a vulnerability. Nothing is installed.</p>
+        <div class="wb-actions"><button id="wbPin" class="btn-ghost">Keep current pack as baseline</button><label class="btn-ghost wb-import">Import baseline pack<input id="wbBaselineImport" type="file" accept=".json,application/json"></label></div>
+        <p id="wbBaselineStatus" role="status">No baseline selected. Baselines live in this tab only; refreshing clears them.</p>
+        <div class="wb-candidate" id="wbCandidateEditor">
+          <h3>Change a candidate policy without touching cases</h3>
+          <p>Keep a baseline first. Load the current pack, select an agent, change its limits, then apply. Test requests and their expectations stay exactly as they are. This edits the pack only, not a running authorization server.</p>
+          <div class="wb-actions"><button id="wbEditLoad" class="btn-ghost">Load policies from current pack</button></div>
+          <div class="wb-form">
+            <label class="wb-wide">Agent to edit<select id="wbEditAgent" disabled></select></label>
+            <label class="wb-wide">Allowed scopes <small>space-separated; blank means no scopes</small><input id="wbEditScopes" disabled maxlength="4096"></label>
+            <label class="wb-wide">Allowed audiences <small>space-separated; at least one required</small><input id="wbEditAudiences" disabled maxlength="4096"></label>
+            <label>Maximum depth<input id="wbEditDepth" disabled type="number" min="1" max="16"></label>
+            <label>Maximum lifetime (seconds)<input id="wbEditTtl" disabled type="number" min="1" max="86400"></label>
+          </div>
+          <div class="wb-actions"><button id="wbEditApply" class="btn-primary" disabled>Apply policy edit, keep cases</button><button id="wbEditDiscard" class="btn-ghost" disabled>Discard unapplied edit</button></div>
+          <p id="wbEditStatus" role="status" aria-live="polite">No policy loaded. Loading again discards unapplied form edits.</p>
+        </div>
+        <details class="wb-editor"><summary>Inspect the kept baseline policies</summary><pre id="wbBaselineView" style="white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px">No baseline selected.</pre></details>
+        <div class="wb-actions"><button id="wbClear" class="btn-ghost">Clear baseline</button><button id="wbCompare" class="btn-primary" disabled>Compare policies</button><button id="wbCompareSave" class="btn-ghost" disabled>Download comparison</button></div>
+        <p id="wbCompareStatus" role="status" aria-live="polite"></p><div id="wbCompareResults" class="wb-results"></div>
+        <p>Only supplied cases are tested. Unchanged outcomes do not mean policies are equivalent, and denied requests can have different refusal reasons. Signature, issuer, expiry, revocation and DPoP checks remain outside this tool.</p>
+      </details>
+      <p class="wb-boundary">Policy checks only: no issuer, signature, token expiry, revocation or proof-of-possession validation. Passing the chosen cases is not a security certification. Packs are sent to this server when you run them, processed in memory and not stored by this application. Do not paste tokens, credentials or confidential configuration. Downloads stay on your device.</p>
+    </div>
+  </section>
+
+  <section class="section" id="lab">
+    <p class="section-label">Try it: you decide what the agent may do</p>
+    <div class="lab">
+      <div class="lab-head"><span class="lab-live"><span class="status-dot ok"></span>live: every change runs the real exchange code on a throwaway server instance</span></div>
+      <p style="margin:0 0 14px;color:var(--ink-2);font-size:14px">Asha lets an assistant act for her. Change what she allows, what each agent asks for, and how long the pass lasts, then watch what is granted and what is refused. Start with the “Try to widen” preset. All people and systems here are made up.</p>
+      <div class="presets" id="presets"></div>
+      <div class="lab-grid">
+        <div class="lab-row"><h3>what Asha grants</h3><div class="lab-line" id="labUser"></div></div>
+        <div class="lab-grid cols" id="labHops"></div>
+        <div class="lab-line"><label class="ck"><input type="checkbox" id="labBind"> bind the last token to a key (proof of possession)</label>
+          <label class="ck">then revoke <select id="labRevoke"><option value="0">nothing</option><option value="1">hop 1 token</option><option value="2">hop 2 token</option><option value="3">hop 3 token</option></select></label></div>
+      </div>
+      <div class="legend" style="margin-top:18px">
+        <span><i class="dot d-teal"></i>granted</span>
+        <span><i class="dot d-amber"></i>revoked by the owner</span>
+        <span><i class="dot d-red"></i>refused</span>
+        <span><span class="chip lost sm">scope</span>lost at this hop</span>
+      </div>
+      <div class="lab-out" id="labOut"></div>
+      <p id="labNote" style="font-size:12px;color:var(--ink-2);font-family:var(--mono);margin:12px 0 0"></p>
+    </div>
+  </section>
+
+  <section class="section" id="problem">
+    <p class="section-label">The problem</p>
+    <div class="cards">
+      <div class="card">
+        <svg class="card-ico" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="5" cy="12" r="2.4"/><circle cx="19" cy="6" r="2.4"/><circle cx="19" cy="18" r="2.4"/><path d="M7.2 10.8 16.8 7.2M7.2 13.2l9.6 3.6"/></svg>
+        <b>Agents pass work on.</b><span>You ask an assistant to check your calendar. It hands part of the job to a helper. Today the helper often inherits your full access.</span>
+      </div>
+      <div class="card">
+        <svg class="card-ico" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16l-6 7v6l-4 2v-8z"/></svg>
+        <b>Access should shrink, not grow.</b><span>Each hand-off should carry fewer permissions and a shorter life. Asking for more than you were given should simply fail.</span>
+      </div>
+      <div class="card">
+        <svg class="card-ico" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1.1"/><circle cx="4.5" cy="12" r="1.1"/><circle cx="4.5" cy="18" r="1.1"/></svg>
+        <b>You need a trail.</b><span>If something goes wrong, you want to know which agent acted for whom, and be able to switch one off and everything it handed out with it.</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <p class="section-label">Technical details</p>
+    <details class="tech"><summary>Run the scripted story, inspect the audit log, send a raw token exchange</summary>
+<section class="section">
+    <p class="section-label">The story</p>
+    <p class="section-sub">
+      A fictional product manager, Asha, lets an assistant agent read her calendar and file notes.
+      The assistant hands calendar work to a summarizer sub-agent. Watch the token shrink at each hop,
+      watch a scope-widening attempt get refused, and see a stolen token fail without the key it was bound to.
+    </p>
+    <button class="run" id="runBtn">Run the delegation story</button>
+    <p class="run-note">Runs five hops against the live exchange endpoint and renders the token claims it returns.</p>
+    <div id="funnelWrap" style="display:none; margin-top:24px;">
+      <p class="run-note" style="margin-bottom:8px">Permissions per hop - they only ever shrink:</p>
+      <div class="chips" id="funnelLegend" style="margin-bottom:10px"></div>
+      <div class="funnel" id="funnel"></div>
+    </div>
+    <div class="chain" id="chain"></div>
+  </section>
+
+  <section class="section">
+    <p class="section-label">Audit trail</p>
+    <div class="audit-bar">
+      <span class="badge" id="auditBadge">chain unverified</span>
+      <span class="head-hash" id="headHash"></span>
+    </div>
+    <div class="log-scroll">
+      <table class="log">
+        <thead><tr><th>#</th><th>event</th><th>actor</th><th>detail</th></tr></thead>
+        <tbody id="auditRows"><tr><td colspan="4" style="color:var(--ink-2)">Run the story to populate the log.</td></tr></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="section">
+    <p class="section-label">Try an exchange</p>
+    <div class="try">
+      <div class="try-row">
+        <div>
+          <label for="clientSel">acting agent</label>
+          <select id="clientSel">
+            <option value="planner-bot">planner-bot</option>
+            <option value="summarizer-tool">summarizer-tool</option>
+            <option value="mystery-agent">mystery-agent (unregistered)</option>
+          </select>
+        </div>
+        <div>
+          <label for="scopeInput">requested scope</label>
+          <input id="scopeInput" value="read:calendar" spellcheck="false">
+        </div>
+        <div>
+          <label for="audSel">audience</label>
+          <select id="audSel">
+            <option value="calendar-api">calendar-api</option>
+            <option value="notes-api">notes-api</option>
+            <option value="billing-api">billing-api (not allowed)</option>
+          </select>
+        </div>
+      </div>
+      <button class="run" id="tryBtn">Exchange</button>
+      <pre class="result" id="tryResult" style="margin-top:14px; display:none"></pre>
+      <pre class="curl" id="curlBlock"></pre>
+    </div>
+  </section>
+
+
+    </details>
+  </section>
+
+  <section class="section">
+    <p class="section-label">What is real, what is not</p>
+    <div class="cards">
+      <div class="card"><div class="card-head"><span class="status-dot ok"></span><b>Real, runs on every click</b></div><span>The token exchange, scope narrowing, lifetime limits, RS256 signing, proof-of-possession checks, revocation of a token and everything derived from it, and the hash-chained audit log. Nothing on this page is pre-recorded.</span></div>
+      <div class="card"><div class="card-head"><span class="status-dot off"></span><b>Made up</b></div><span>Asha, the agents, the calendar and notes services, and their data. Each lab run uses a fresh throwaway service. Your policy workbench inputs are separate from this fictional world and are not stored by the application.</span></div>
+      <div class="card"><div class="card-head"><span class="status-dot warn"></span><b>Not claimed</b></div><span>No login or consent screen, no independent security audit, not production ready. Proof of possession is a subset of the spec, and its single-use tracking works per server instance only. The audit chain shows tampering; it does not prevent it.</span></div>
+    </div>
+  </section>
+
+  <div class="note">
+    <b>What this is.</b> A runnable reference implementation of OAuth 2.0 Token Exchange
+    (RFC 8693) built from public specifications, with RS256 JWTs (RFC 7519), a JWKS endpoint
+    (RFC 7517), and a hash-chained audit log. The hash chain is <b>tamper-evident</b>: it detects
+    edits to recorded history. It is not tamper-proof storage, and this server is not a
+    production authorization server.
+  </div>
+
+  <footer><span>actas · fictional token lab + your policy checks</span><span>v0.14.1</span></footer>
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+// JSON.parse alone silently keeps the last duplicate field. Check raw input
+// before normalization, downloads or any policy/baseline state change.
+function wbParse(source){
+  const value=JSON.parse(source), stack=[];
+  for(let i=0;i<source.length;){
+    const c=source[i];
+    if(c==='"'){
+      const start=i++;
+      while(i<source.length){if(source[i]==="\\"){i+=2;continue;}if(source[i++]==='"')break;}
+      const top=stack.at(-1);
+      if(top?.keys&&top.nextKey){
+        const key=JSON.parse(source.slice(start,i));
+        if(top.keys.has(key))throw Error("Duplicate JSON object field. Use each field only once.");
+        top.keys.add(key);top.nextKey=false;
+      }
+    }else if(c==="{"){stack.push({keys:new Set(),nextKey:true});i++;}
+    else if(c==="["){stack.push({keys:null});i++;}
+    else if(c==="}"||c==="]"){stack.pop();i++;}
+    else if(c===","){const top=stack.at(-1);if(top?.keys)top.nextKey=true;i++;}
+    else i++;
+  }
+  return value;
+}
+let wbCaseSource=null, wbCasePack=null, wbCaseDirty=false;
+let wbEditSource=null, wbEditPolicies=null, wbEditDirty=false;
+let wbChecked = null, wbBaseline=null, wbComparison=null, wbRevision=0;
+function wbCompareInvalidate(){wbRevision++;wbComparison=null;$("wbCompareSave").disabled=true;$("wbCompareResults").replaceChildren();$("wbCompareStatus").textContent=wbBaseline?"Candidate changed. Compare again to refresh.":"";$("wbCompare").disabled=!wbBaseline||$("wbRun").disabled;}
+
+function wbInvalidate(){wbCaseReset();wbEditorReset();wbCompareInvalidate();wbChecked=null;$("wbReport").disabled=true;$("wbResults").replaceChildren();$("wbStatus").textContent="Pack changed. Run policy checks to refresh results.";}
+function wbBuild(){
+  const cid=$("wbClient").value.trim(), aud=$("wbAudience").value.trim();
+  const scope=[...new Set($("wbScopes").value.trim().split(/\s+/).filter(Boolean))];
+  const depth=Number($("wbDepth").value), ttl=Number($("wbTtl").value);
+  // Generated probes must be outside the configured policy, not fixed names that could collide.
+  const fresh=(base, used)=>{while(used.includes(base))base+="x";return base;};
+  const extra=fresh("forbidden:probe",scope), outsider=fresh("unregistered-agent",[cid]), other=fresh("other-api",[aud]);
+  const policy={client_id:cid,allowed_scopes:scope,allowed_audiences:[aud],max_delegation_depth:depth,max_token_ttl:ttl};
+  const base={client_id:cid,requested_scope:scope,subject_scope:scope,audience:aud,delegation_depth:depth,requested_ttl:ttl,expect_allowed:true};
+  const c=(name,patch={})=>({name,...base,...patch});
+  const cases=[c("allow-at-limits"),c("unknown-agent",{client_id:outsider,expect_allowed:false}),c("wrong-audience",{audience:other,expect_allowed:false}),c("scope-widening",{requested_scope:[...scope,extra],expect_allowed:false}),c("outside-policy",{requested_scope:[extra],subject_scope:[...scope,extra],expect_allowed:false}),c("depth-exceeded",{delegation_depth:depth+1,expect_allowed:false}),c("lifetime-exceeded",{requested_ttl:ttl+1,expect_allowed:false}),c("empty-scope",{requested_scope:[]})];
+  $("wbPack").value=JSON.stringify({schema_version:1,policies:[policy],cases},null,2);wbInvalidate();$("wbRun").disabled=false;$("wbCompare").disabled=!wbBaseline;
+  $("wbStatus").textContent="8 boundary cases built. Run them, or edit the JSON before checking.";
+}
+function wbDownload(value,name){const u=URL.createObjectURL(new Blob([JSON.stringify(value,null,2)+"\n"],{type:"application/json"}));const a=document.createElement("a");a.href=u;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(u),1000);}
+$("wbGenerate").onclick=wbBuild;
+document.querySelectorAll("#workbench > .lab > .wb-form input").forEach(input=>input.addEventListener("input",()=>{wbInvalidate();$("wbRun").disabled=true;$("wbCompare").disabled=true;$("wbStatus").textContent="Builder changed. Click Build 8 boundary cases to apply these values.";}));
+$("wbPack").oninput=()=>{wbInvalidate();$("wbRun").disabled=false;$("wbCompare").disabled=!wbBaseline;};
+let wbImportSerial=0;
+async function wbImportFile(input,baseline){
+  const file=input.files[0];if(!file)return;
+  // Any newer import or intervening work invalidates this asynchronous read.
+  // Do not reset forms, status or a newer file selection on stale completion.
+  const serial=++wbImportSerial,revision=wbRevision;
+  const current=()=>serial===wbImportSerial&&revision===wbRevision;
+  try{
+    if(wbCaseDirty||wbEditDirty)throw Error("Apply or discard the edit before importing.");
+    if(file.size>65536)throw Error("Pack exceeds 64 KiB");
+    const source=await file.text();if(!current())return;
+    const pack=wbParse(source);
+    if(baseline)wbUseBaseline(pack,"imported pack");
+    else{
+      $("wbPack").value=JSON.stringify(pack,null,2);wbInvalidate();
+      $("wbStatus").textContent="Pack imported. Run checks to validate schema and decisions.";
+      $("wbRun").disabled=false;$("wbCompare").disabled=!wbBaseline;
+    }
+  }catch(e){if(current())$(baseline?"wbBaselineStatus":"wbStatus").textContent=e.message+(baseline?" Previous baseline, if any, is unchanged.":"");}
+  finally{if(serial===wbImportSerial)input.value="";}
+}
+$("wbImport").onchange=function(){return wbImportFile(this,false);};
+$("wbSave").onclick=()=>{try{if(wbCaseDirty||wbEditDirty)throw Error("Apply or discard the edit before downloading.");wbDownload(wbParse($("wbPack").value),"actas-policy-pack.json");}catch(e){$("wbStatus").textContent="Fix the JSON before downloading: "+e.message;}};
+$("wbReport").onclick=()=>{if(wbChecked)wbDownload(wbChecked,"actas-policy-report.json");};
+$("wbRun").onclick=async()=>{
+  if(wbCaseDirty||wbEditDirty)return;
+  wbInvalidate();const source=$("wbPack").value,revision=wbRevision;
+  $("wbRun").disabled=true;$("wbStatus").textContent="Checking against the live policy engine…";
+  try{
+    const pack=wbParse(source);const response=await fetch("/tools/policy-check",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(pack)});const report=await response.json();
+    if($("wbPack").value!==source||wbRevision!==revision)return;
+    if(!response.ok)throw Error(report.error_description||report.error||"Check failed");
+    wbChecked={configuration:pack,report};$("wbReport").disabled=false;
+    $("wbStatus").textContent=`${report.matched}/${report.total} expectations matched. ${report.warnings.join(" ")}`;
+    for(const r of report.results){const card=document.createElement("div");card.className="wb-result"+(r.matched?"":" mismatch");const title=document.createElement("strong");title.textContent=(r.matched?"MATCH":"MISMATCH")+" · "+r.name;card.append(title);for(const text of [`Expected ${r.expected?"allow":"deny"} → observed ${r.allowed?"allow":"deny"}`,r.reason]){const p=document.createElement("p");p.textContent=text;card.append(p);}$("wbResults").append(card);}
+  }catch(e){if(wbRevision===revision)$("wbStatus").textContent=e.message;}finally{if(wbRevision===revision)$("wbRun").disabled=false;}
+};
+const wbEditFields=["wbEditScopes","wbEditAudiences","wbEditDepth","wbEditTtl"];
+function wbEditorReset(){
+  wbEditSource=null;wbEditPolicies=null;wbEditDirty=false;
+  if(!$("wbEditAgent"))return;
+  $("wbEditAgent").replaceChildren();$("wbEditAgent").disabled=true;
+  for(const id of wbEditFields){$(id).disabled=true;$(id).value="";}
+  $("wbEditApply").disabled=true;$("wbEditDiscard").disabled=true;
+  $("wbEditStatus").textContent="No policy loaded. Load the current pack before editing.";
+}
+function wbEditorFill(){
+  const p=wbEditPolicies[Number($("wbEditAgent").value)];
+  $("wbEditScopes").value=p.allowed_scopes.join(" ");$("wbEditAudiences").value=p.allowed_audiences.join(" ");
+  $("wbEditDepth").value=p.max_delegation_depth;$("wbEditTtl").value=p.max_token_ttl;
+  wbEditDirty=false;$("wbEditAgent").disabled=false;$("wbEditApply").disabled=true;$("wbEditDiscard").disabled=true;
+  $("wbEditStatus").textContent="Loaded "+p.client_id+". Change fields, then apply before running checks.";
+  $("wbRun").disabled=false;$("wbCompare").disabled=!wbBaseline;
+}
+function wbEditorList(value,min){
+  const values=value.trim()?value.trim().split(/\s+/):[];
+  if(values.length<min||values.length>32||new Set(values).size!==values.length||values.some(v=>! /^[A-Za-z0-9][A-Za-z0-9._~:/@+\-]{0,127}$/.test(v)))throw Error("Use "+min+"-32 unique identifiers, each 1-128 characters, separated by spaces.");
+  return values;
+}
+$("wbEditLoad").onclick=()=>{
+  try{
+    if(wbCaseDirty)throw Error("Apply or discard the case edit first.");
+    const source=$("wbPack").value,pack=wbParse(source);
+    if(pack.schema_version!==1||!Array.isArray(pack.policies)||!pack.policies.length||pack.policies.length>8)throw Error("Load a version-1 pack with 1-8 policies.");
+    for(const p of pack.policies){
+      if(!p||typeof p.client_id!=="string"||!Array.isArray(p.allowed_scopes)||!Array.isArray(p.allowed_audiences)||p.allowed_scopes.some(s=>typeof s!=="string")||p.allowed_audiences.some(s=>typeof s!=="string"))throw Error("Invalid policy fields. Fix the JSON or import a valid pack.");
+    }
+    wbCaseReset();wbEditSource=source;wbEditPolicies=structuredClone(pack.policies);$("wbEditAgent").replaceChildren();
+    wbEditPolicies.forEach((p,i)=>{const option=document.createElement("option");option.value=i;option.textContent=p.client_id;$("wbEditAgent").append(option);});
+    for(const id of wbEditFields)$(id).disabled=false;
+    wbEditorFill();
+  }catch(e){$("wbEditStatus").textContent=e.message;}
+};
+$("wbEditAgent").onchange=wbEditorFill;
+for(const id of wbEditFields)$(id).addEventListener("input",()=>{
+  wbEditDirty=true;wbChecked=null;wbCompareInvalidate();$("wbReport").disabled=true;$("wbResults").replaceChildren();
+  $("wbEditAgent").disabled=true;$("wbEditApply").disabled=false;$("wbEditDiscard").disabled=false;
+  $("wbRun").disabled=true;$("wbCompare").disabled=true;
+  $("wbStatus").textContent="Unapplied candidate edit. Apply or discard before running.";
+  $("wbEditStatus").textContent="Unapplied edit. Cases and current pack are unchanged until Apply.";
+});
+$("wbEditDiscard").onclick=()=>{wbEditorFill();$("wbStatus").textContent="Unapplied edit discarded. Run checks again for fresh results.";};
+$("wbEditApply").onclick=()=>{
+  try{
+    if(!wbEditSource||$("wbPack").value!==wbEditSource)throw Error("Pack changed since loading. Load its policies again.");
+    const allowed_scopes=wbEditorList($("wbEditScopes").value,0),allowed_audiences=wbEditorList($("wbEditAudiences").value,1);
+    const depth=Number($("wbEditDepth").value),ttl=Number($("wbEditTtl").value);
+    if(!Number.isInteger(depth)||depth<1||depth>16||!Number.isInteger(ttl)||ttl<1||ttl>86400)throw Error("Depth must be 1-16; lifetime must be 1-86400 whole seconds.");
+    const pack=wbParse(wbEditSource),i=Number($("wbEditAgent").value),cid=pack.policies[i].client_id;
+    pack.policies[i]={...pack.policies[i],allowed_scopes,allowed_audiences,max_delegation_depth:depth,max_token_ttl:ttl};
+    const cases=JSON.stringify(pack.cases);$("wbPack").value=JSON.stringify(pack,null,2);wbInvalidate();$("wbRun").disabled=false;$("wbCompare").disabled=!wbBaseline;
+    if(JSON.stringify(wbParse($("wbPack").value).cases)!==cases)throw Error("Cases changed unexpectedly. Reload your original pack.");
+    $("wbEditLoad").click();$("wbEditAgent").value=i;wbEditorFill();$("wbEditStatus").textContent="Applied policy for "+cid+". All "+pack.cases.length+" cases and expectations kept unchanged. Run checks or compare.";
+    $("wbStatus").textContent="Candidate policy changed, cases preserved. Run checks or compare for fresh results.";
+  }catch(e){$("wbEditStatus").textContent=e.message;}
+};
+function wbUseBaseline(pack,label){
+  if(wbCaseDirty||wbEditDirty)throw Error("Apply or discard the edit before keeping a baseline.");
+  if(!pack||pack.schema_version!==1||!Array.isArray(pack.policies))throw Error("Select a policy pack with schema_version 1 and policies.");
+  wbBaseline=structuredClone(pack.policies);wbCompareInvalidate();$("wbBaselineView").textContent=JSON.stringify(wbBaseline,null,2);
+  $("wbBaselineStatus").textContent=`Baseline kept from ${label}: ${wbBaseline.length} agent policies. In this tab only. Server validates on comparison.`;
+}
+$("wbClear").onclick=()=>{wbBaseline=null;wbCompareInvalidate();$("wbBaselineView").textContent="No baseline selected.";$("wbBaselineStatus").textContent="Baseline cleared from this tab.";};
+$("wbPin").onclick=()=>{try{wbUseBaseline(wbParse($("wbPack").value),"current JSON pack");}catch(e){$("wbBaselineStatus").textContent=e.message+" Previous baseline, if any, is unchanged.";}};
+$("wbBaselineImport").onchange=function(){return wbImportFile(this,true);};
+$("wbCompareSave").onclick=()=>{if(wbComparison)wbDownload(wbComparison,"actas-policy-comparison.json");};
+$("wbCompare").onclick=async()=>{
+  if(wbCaseDirty||wbEditDirty)return;
+  wbCompareInvalidate();const revision=wbRevision;$("wbCompare").disabled=true;$("wbCompareStatus").textContent="Comparing identical cases against both policies…";
+  try{
+    const input={baseline_policies:structuredClone(wbBaseline),candidate:wbParse($("wbPack").value)};
+    const response=await fetch("/tools/policy-compare",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(input)});const report=await response.json();
+    if(wbRevision!==revision)return;
+    if(!response.ok)throw Error(report.error_description||report.error||"Comparison failed");
+    wbComparison={input,report};$("wbCompareSave").disabled=false;
+    $("wbCompareStatus").textContent=`${report.newly_allowed} newly allowed · ${report.newly_denied} newly denied · ${report.unchanged} unchanged outcomes. Candidate expectations: ${report.candidate.matched}/${report.total} matched. Only these ${report.total} cases were compared.`;
+    for(const change of [...report.changes].sort((a,b)=>(a.transition==="unchanged")-(b.transition==="unchanged"))){const card=document.createElement("div");card.className="wb-result"+(change.transition==="newly_allowed"?" mismatch":"");const title=document.createElement("strong");title.textContent=change.transition.replaceAll("_"," ").toUpperCase()+" · "+change.name;card.append(title);for(const text of [`Before: ${change.before_allowed?"allow":"deny"} (${change.before_reason})`,`After: ${change.after_allowed?"allow":"deny"} (${change.after_reason})`,`Candidate expectation ${change.expected?"allow":"deny"}: ${change.candidate_matched?"matched":"MISMATCH"}`]){const p=document.createElement("p");p.textContent=text;card.append(p);}$("wbCompareResults").append(card);}
+  }catch(e){if(wbRevision===revision)$("wbCompareStatus").textContent=e.message;}finally{if(wbRevision===revision)$("wbCompare").disabled=!wbBaseline||$("wbRun").disabled;}
+};
+const wbCaseFields=["wbCaseName","wbCaseClient","wbCaseRequested","wbCaseSubject","wbCaseAudience","wbCaseExpected","wbCaseDepth","wbCaseTtl"];
+function wbCaseReset(){
+  wbCaseSource=null;wbCasePack=null;wbCaseDirty=false;
+  $("wbCaseSelect").replaceChildren();$("wbCaseSelect").disabled=true;
+  for(const id of wbCaseFields){$(id).disabled=true;$(id).value="";}
+  $("wbCaseApply").disabled=true;$("wbCaseDiscard").disabled=true;
+  $("wbCaseStatus").textContent="No cases loaded. Load the current pack before editing.";
+}
+function wbCaseValidate(c){
+  const keys=["name","client_id","requested_scope","subject_scope","audience","delegation_depth","requested_ttl","expect_allowed"];
+  if(!c||Object.keys(c).length!==keys.length||keys.some(k=>!Object.hasOwn(c,k)))throw Error("Invalid case fields. Fix the JSON first; no fields will be dropped.");
+  for(const key of ["name","client_id","audience"])if(typeof c[key]!=="string"||!/^[A-Za-z0-9][A-Za-z0-9._~:/@+\-]{0,127}$/.test(c[key]))throw Error("Case identifiers must be 1-128 identifier characters.");
+  for(const key of ["requested_scope","subject_scope"]){if(!Array.isArray(c[key])||c[key].some(v=>typeof v!=="string"))throw Error("Scopes must be lists of identifiers.");wbEditorList(c[key].join(" "),0);if(c[key].some(v=>!/^[A-Za-z0-9][A-Za-z0-9._~:/@+\-]{0,127}$/.test(v)))throw Error("Each scope must be one non-empty identifier.");}
+  if(typeof c.expect_allowed!=="boolean"||!Number.isInteger(c.delegation_depth)||c.delegation_depth<1||c.delegation_depth>17||!Number.isInteger(c.requested_ttl)||c.requested_ttl<1||c.requested_ttl>86401)throw Error("Depth must be 1-17, lifetime 1-86401 whole seconds; choose Allow or Deny.");
+}
+function wbCaseFill(){
+  const i=Number($("wbCaseSelect").value), p=wbCasePack.policies[0];
+  const c=wbCasePack.cases[i]||{name:"my-request",client_id:p.client_id,requested_scope:[],subject_scope:[...p.allowed_scopes],audience:p.allowed_audiences[0],delegation_depth:1,requested_ttl:p.max_token_ttl,expect_allowed:false};
+  const values=[c.name,c.client_id,c.requested_scope.join(" "),c.subject_scope.join(" "),c.audience,String(c.expect_allowed),c.delegation_depth,c.requested_ttl];
+  wbCaseFields.forEach((id,j)=>{$(id).disabled=false;$(id).value=values[j];});
+  wbCaseDirty=false;$("wbCaseSelect").disabled=false;$("wbCaseApply").disabled=true;$("wbCaseDiscard").disabled=true;
+  $("wbRun").disabled=false;$("wbCompare").disabled=!wbBaseline;
+  $("wbCaseStatus").textContent=i===wbCasePack.cases.length?"New case draft: choose your expected decision, then Apply. Nothing added yet.":"Loaded "+c.name+". Changes apply only to this case.";
+}
+$("wbCaseLoad").onclick=()=>{try{
+  if(wbEditDirty||wbCaseDirty)throw Error("Apply or discard the current edit before loading cases.");
+  const source=$("wbPack").value,pack=wbParse(source);
+  if(pack.schema_version!==1||!Array.isArray(pack.cases)||pack.cases.length<1||pack.cases.length>64||!Array.isArray(pack.policies)||!pack.policies.length)throw Error("Load a version-1 pack with 1-64 cases and policies.");
+  pack.cases.forEach(wbCaseValidate);const names=pack.cases.map(c=>c.name);if(new Set(names).size!==names.length)throw Error("Case names must be unique.");
+  const p=pack.policies[0];if(!p||typeof p.client_id!=="string"||!Array.isArray(p.allowed_scopes)||!Array.isArray(p.allowed_audiences)||!p.allowed_audiences.length)throw Error("Fix policy fields before loading cases.");
+  wbEditorReset();wbCaseSource=source;wbCasePack=structuredClone(pack);$("wbCaseSelect").replaceChildren();
+  for(let i=0;i<=pack.cases.length;i++){if(i===64)break;const o=document.createElement("option");o.value=i;o.textContent=i===pack.cases.length?"+ Add a new case":pack.cases[i].name;$("wbCaseSelect").append(o);}
+  wbCaseFill();
+}catch(e){$("wbCaseStatus").textContent=e.message;}};
+$("wbCaseSelect").onchange=wbCaseFill;
+for(const id of wbCaseFields)$(id).addEventListener("input",()=>{
+  wbCaseDirty=true;wbChecked=null;wbCompareInvalidate();$("wbReport").disabled=true;$("wbResults").replaceChildren();
+  $("wbCaseSelect").disabled=true;$("wbCaseApply").disabled=false;$("wbCaseDiscard").disabled=false;$("wbRun").disabled=true;$("wbCompare").disabled=true;
+  $("wbCaseStatus").textContent="Unapplied case edit. Apply or discard before running or downloading.";
+  $("wbStatus").textContent="Case edit pending. Pack and baseline have not changed.";
+});
+$("wbCaseDiscard").onclick=()=>{wbCaseFill();$("wbStatus").textContent="Case edit discarded. Run again for fresh results.";};
+$("wbCaseApply").onclick=()=>{try{
+  if(!wbCaseSource||$("wbPack").value!==wbCaseSource)throw Error("Pack changed. Load cases again.");
+  const c={name:$("wbCaseName").value.trim(),client_id:$("wbCaseClient").value.trim(),requested_scope:wbEditorList($("wbCaseRequested").value,0),subject_scope:wbEditorList($("wbCaseSubject").value,0),audience:$("wbCaseAudience").value.trim(),delegation_depth:Number($("wbCaseDepth").value),requested_ttl:Number($("wbCaseTtl").value),expect_allowed:$("wbCaseExpected").value==="true"};
+  wbCaseValidate(c);const i=Number($("wbCaseSelect").value),pack=structuredClone(wbCasePack);
+  if(pack.cases.some((other,j)=>j!==i&&other.name===c.name))throw Error("Choose a unique case name. Pack is unchanged.");
+  if(i===pack.cases.length&&pack.cases.length>=64)throw Error("Maximum 64 cases. Pack is unchanged.");
+  pack.cases[i]=c;$("wbPack").value=JSON.stringify(pack,null,2);wbInvalidate();$("wbRun").disabled=false;$("wbCompare").disabled=!wbBaseline;
+  $("wbCaseLoad").click();$("wbCaseSelect").value=i;wbCaseFill();
+  $("wbCaseStatus").textContent="Applied "+c.name+". Other cases, policies and kept baseline unchanged. Run checks or compare.";
+  $("wbStatus").textContent="Case applied. Run checks to see whether the engine matches your intent.";
+}catch(e){$("wbCaseStatus").textContent=e.message;}};
+wbBuild();
+
+function scopeChips(claims, prevScope) {
+  const cur = (claims.scope || "").split(" ").filter(Boolean);
+  const prev = prevScope ? prevScope.split(" ").filter(Boolean) : cur;
+  return prev.map(s => {
+    const kept = cur.includes(s);
+    return `<span class="chip${kept ? "" : " lost"}">${s}</span>`;
+  }).join("");
+}
+
+function chainCrumb(claims) {
+  const parts = [];
+  let node = claims.act;
+  while (node && node.sub) { parts.unshift(node.sub); node = node.act; }
+  parts.unshift(claims.sub);
+  return parts.map((p, i) => i === parts.length - 1 && parts.length > 1 ? `<b>${p}</b>` : p).join(" → ");
+}
+
+function renderFunnel(trace) {
+  const holder = $("funnel");
+  holder.innerHTML = "";
+  const hops = trace.filter(h => h.claims);
+  if (!hops.length) return;
+  const universe = hops[0].claims.scope.split(" ").filter(Boolean);
+  $("funnelLegend").innerHTML = universe.map(s => `<span class="chip">${s}</span>`).join("");
+  for (const h of hops) {
+    const cur = h.claims.scope.split(" ").filter(Boolean);
+    const segs = universe.map(s => {
+      const kept = cur.includes(s);
+      return `<div class="seg${kept ? "" : " lost"}"><span>${s}</span></div>`;
+    }).join("");
+    const who = h.hop === 0 ? "user" : (h.claims.act ? h.claims.act.sub : "?");
+    holder.insertAdjacentHTML("beforeend",
+      `<div class="funnel-row"><div class="funnel-label">${who}</div><div class="funnel-bar">${segs}</div></div>`);
+  }
+  $("funnelWrap").style.display = "block";
+}
+
+function renderTrace(trace) {
+  const el = $("chain");
+  el.innerHTML = "";
+  renderFunnel(trace);
+  let prevScope = null;
+  for (const hop of trace) {
+    const div = document.createElement("div");
+    if (hop.error) {
+      div.className = "hop denied";
+      div.innerHTML = `
+        <div class="hop-head"><span class="hop-title">${hop.label}</span><span class="hop-num">hop ${hop.hop}</span></div>
+        <div class="denied-reason">${hop.error}: ${hop.reason}</div>`;
+    } else {
+      const c = hop.claims;
+      div.className = "hop";
+      let popBlock = "";
+      if (hop.pop) {
+        popBlock = `
+        <div class="claims"><div class="claim"><kbd>cnf.jkt</kbd><code>${hop.pop.jkt.slice(0, 27)}…</code></div></div>
+        <div class="pop">
+          <div class="pop-row"><span class="pop-dot ${hop.pop.holder_accepted ? "ok" : "no"}"></span><span>Holder presents the token with a signed proof: <b>${hop.pop.holder_accepted ? "accepted" : "rejected"}</b></span></div>
+          <div class="pop-row"><span class="pop-dot ${hop.pop.thief_rejected ? "ok" : "no"}"></span><span>Thief replays the stolen token with a different key: <b>${hop.pop.thief_rejected ? "rejected" : "accepted"}</b></span></div>
+        </div>`;
+      }
+      div.innerHTML = `
+        <div class="hop-head"><span class="hop-title">${hop.label}</span><span class="hop-num">hop ${hop.hop}</span></div>
+        <div class="claims">
+          <div class="claim"><kbd>sub</kbd><code>${c.sub}</code></div>
+          <div class="claim"><kbd>aud</kbd><code>${Array.isArray(c.aud) ? c.aud.join(", ") : c.aud}</code></div>
+          <div class="claim"><kbd>exp</kbd><code>${new Date(c.exp * 1000).toLocaleTimeString()} (${Math.max(0, c.exp - Math.floor(Date.now()/1000))}s left)</code></div>
+        </div>
+        <div class="chips">${scopeChips(c, prevScope)}</div>
+        <div class="crumb">${chainCrumb(c)}</div>
+        ${popBlock}`;
+      prevScope = c.scope;
+    }
+    el.appendChild(div);
+  }
+}
+
+function renderAudit(audit) {
+  const badge = $("auditBadge");
+  if (audit.ok) {
+    badge.textContent = `chain intact · ${audit.entries.length} entries`;
+    badge.className = "badge";
+  } else {
+    badge.textContent = `chain broken at #${audit.first_bad_seq}`;
+    badge.className = "badge bad";
+  }
+  const rows = audit.entries.slice().reverse().map(e => {
+    const d = e.detail;
+    const who = d.actor || d.client_id || "-";
+    const what = d.granted_scope || d.requested_scope || d.error || "";
+    const cls = e.event.endsWith("granted") ? "granted" : "denied";
+    return `<tr><td>${e.seq}</td><td class="${cls}">${e.event.replace("exchange.", "")}</td><td>${who}</td><td>${what}</td></tr>`;
+  }).join("");
+  $("auditRows").innerHTML = rows;
+  const head = audit.entries.length ? audit.entries[audit.entries.length - 1].hash : "";
+  $("headHash").textContent = head ? `head ${head.slice(0, 24)}…` : "";
+}
+
+$("runBtn").addEventListener("click", async () => {
+  const btn = $("runBtn");
+  btn.disabled = true; btn.textContent = "Running…";
+  try {
+    const r = await fetch("/demo/scenario");
+    const body = await r.json();
+    renderTrace(body.trace);
+    renderAudit(body.audit);
+  } finally {
+    btn.disabled = false; btn.textContent = "Run the delegation story";
+  }
+});
+
+function updateCurl() {
+  $("curlBlock").textContent =
+`curl -X POST $LOCATION/oauth/token \\
+  -d grant_type=urn:ietf:params:oauth:grant-type:token-exchange \\
+  -d subject_token=$USER_TOKEN \\
+  -d subject_token_type=urn:ietf:params:oauth:token-type:jwt \\
+  -d client_id=${$("clientSel").value} \\
+  -d scope="${$("scopeInput").value}" \\
+  -d audience=${$("audSel").value}`.replace("$LOCATION", location.origin);
+}
+["clientSel", "scopeInput", "audSel"].forEach(id => $(id).addEventListener("input", updateCurl));
+updateCurl();
+
+if (new URLSearchParams(location.search).has("autorun")) {
+  $("runBtn").click();
+}
+
+$("tryBtn").addEventListener("click", async () => {
+  const out = $("tryResult");
+  out.style.display = "block";
+  out.textContent = "…";
+  // the demo mints a fresh user token via the scenario hop-0 convention:
+  // ask the server to run an ad-hoc exchange through the same endpoint shape
+  const userTok = await (await fetch("/demo/usertoken")).text();
+  const form = new URLSearchParams({
+    grant_type: "urn:ietf:params:oauth:grant-type:token-exchange",
+    subject_token: userTok,
+    subject_token_type: "urn:ietf:params:oauth:token-type:jwt",
+    client_id: $("clientSel").value,
+    scope: $("scopeInput").value,
+    audience: $("audSel").value,
+  });
+  const r = await fetch("/oauth/token", { method: "POST", body: form });
+  const body = await r.json();
+  if (body.access_token) {
+    const parts = body.access_token.split(".");
+    const claims = JSON.parse(atob(parts[1].replace(/-/g, "+").replace(/_/g, "/")));
+    out.textContent = `HTTP ${r.status} - granted\n\n` + JSON.stringify(claims, null, 2);
+  } else {
+    out.textContent = `HTTP ${r.status} - denied\n\n` + JSON.stringify(body, null, 2);
+  }
+});
+/* ---- policy lab ---- */
+const LAB_SCOPES = ["read:calendar", "write:notes", "read:profile", "admin:all"];
+const LAB_PRESETS = {
+  "Narrowing chain": {user: ["read:calendar","write:notes","read:profile"], bind: false, hops: [
+    {on:true, actor:"planner-bot", scope:["read:calendar","write:notes"], audience:"calendar-api", ttl:600},
+    {on:true, actor:"summarizer-tool", scope:["read:calendar"], audience:"calendar-api", ttl:300},
+    {on:false, actor:"summarizer-tool", scope:["read:calendar"], audience:"calendar-api", ttl:300}]},
+  "Try to widen": {user: ["read:calendar","write:notes","read:profile"], bind: false, hops: [
+    {on:true, actor:"planner-bot", scope:["read:calendar"], audience:"calendar-api", ttl:300},
+    {on:true, actor:"summarizer-tool", scope:["read:calendar","write:notes"], audience:"calendar-api", ttl:300},
+    {on:false, actor:"summarizer-tool", scope:["read:calendar"], audience:"calendar-api", ttl:300}]},
+  "Ask for admin:all": {user: ["read:calendar","write:notes","read:profile"], bind: false, hops: [
+    {on:true, actor:"planner-bot", scope:["admin:all"], audience:"calendar-api", ttl:300},
+    {on:false, actor:"summarizer-tool", scope:["read:calendar"], audience:"calendar-api", ttl:300},
+    {on:false, actor:"summarizer-tool", scope:["read:calendar"], audience:"calendar-api", ttl:300}]},
+  "Key-bound token": {user: ["read:calendar","write:notes","read:profile"], bind: true, hops: [
+    {on:true, actor:"planner-bot", scope:["read:calendar"], audience:"calendar-api", ttl:300},
+    {on:false, actor:"summarizer-tool", scope:["read:calendar"], audience:"calendar-api", ttl:300},
+    {on:false, actor:"summarizer-tool", scope:["read:calendar"], audience:"calendar-api", ttl:300}]},
+};
+let labState = JSON.parse(JSON.stringify(LAB_PRESETS["Narrowing chain"]));
+let labTimer = null, labSeq = 0;
+
+function labBuild() {
+  $("labUser").innerHTML = LAB_SCOPES.slice(0,3).map(s =>
+    `<label class="ck"><input type="checkbox" data-u="${s}" ${labState.user.includes(s) ? "checked" : ""}>${s}</label>`).join("");
+  $("labHops").innerHTML = labState.hops.map((h, i) => `
+    <div class="lab-row ${h.on ? "" : "off"}" data-i="${i}">
+      <h3>hop ${i+1} ${i === 0 ? "" : `<label class="ck" style="margin-left:8px"><input type="checkbox" data-on="${i}" ${h.on ? "checked" : ""}>enabled</label>`}</h3>
+      <div class="lab-line">
+        <select data-actor="${i}">${["planner-bot","summarizer-tool"].map(a => `<option ${h.actor===a?"selected":""}>${a}</option>`).join("")}</select>
+        <select data-aud="${i}">${["calendar-api","notes-api","billing-api"].map(a => `<option ${h.audience===a?"selected":""}>${a}</option>`).join("")}</select>
+        <select data-ttl="${i}">${[60,300,600,900,3600].map(t => `<option value="${t}" ${h.ttl===t?"selected":""}>${t}s</option>`).join("")}</select>
+      </div>
+      <div class="lab-line">${LAB_SCOPES.map(s => `<label class="ck"><input type="checkbox" data-s="${i}|${s}" ${h.scope.includes(s)?"checked":""}>${s}</label>`).join("")}</div>
+    </div>`).join("");
+  $("labBind").checked = labState.bind;
+  $("labRevoke").value = String(labState.revoke || 0);
+}
+function labPresets() {
+  $("presets").innerHTML = Object.keys(LAB_PRESETS).map(k => `<button data-p="${k}">${k}</button>`).join("");
+  const mark = (k) => document.querySelectorAll("#presets button").forEach(b => b.classList.toggle("active", b.dataset.p === k));
+  mark("Narrowing chain");
+  $("presets").addEventListener("click", e => {
+    const k = e.target.dataset.p; if (!k) return;
+    mark(k);
+    labState = JSON.parse(JSON.stringify(LAB_PRESETS[k])); labBuild(); labRun();
+  });
+}
+function labSync() {
+  labState.user = [...document.querySelectorAll("[data-u]")].filter(x => x.checked).map(x => x.dataset.u);
+  labState.bind = $("labBind").checked;
+  labState.revoke = parseInt($("labRevoke").value, 10);
+  labState.hops.forEach((h, i) => {
+    const q = (a) => document.querySelector(`[data-${a}="${i}"]`);
+    if (i > 0) h.on = q("on").checked;
+    h.actor = q("actor").value; h.audience = q("aud").value; h.ttl = parseInt(q("ttl").value, 10);
+    h.scope = LAB_SCOPES.filter(s => document.querySelector(`[data-s="${i}|${s}"]`).checked);
+  });
+  document.querySelectorAll("#labHops .lab-row").forEach((row, i) => row.classList.toggle("off", !labState.hops[i].on));
+}
+const chipRow = (list, prev) => (prev || list).map(s => `<span class="chip${list.includes(s) ? "" : " lost"}">${s}</span>`).join("");
+
+function labRender(res) {
+  const out = $("labOut"); let html = ""; let prev = null;
+  for (const st of res.steps) {
+    if (st.hop > 0) html += '<div class="arrow"></div>';
+    if (st.ok) {
+      const who = st.hop === 0 ? "Asha (user token)" : st.actor;
+      const extra = st.hop === 0 ? "" : `${st.audience} · ${st.expires_in}s${st.bound ? " · key-bound" : ""}`;
+      html += `<div class="node${st.revoked ? " revoked" : ""}"><div class="who">${who}${st.revoked ? ' <span class="denied-reason" style="display:inline"> revoked</span>' : ""}</div><div class="meta">${extra}</div>
+        <div class="chips">${chipRow(st.scope, prev)}</div>
+        ${st.chain ? `<div class="crumb">Asha → ${st.chain.map((c,i)=> i===st.chain.length-1?`<b>${c}</b>`:c).join(" → ")}</div>` : ""}</div>`;
+      prev = st.scope;
+    } else {
+      html += `<div class="node bad"><div class="who">${st.actor} refused</div>
+        <div class="meta">asked for ${st.requested.join(", ")} on ${st.audience}</div>
+        <div class="denied-reason">${st.error}: ${st.reason}</div></div>`;
+    }
+  }
+  if (res.reached_end) {
+    html += '<div class="arrow"></div><div class="node"><div class="who">What the last token can do</div><div class="verdicts">' +
+      res.outcome.actions.map(a => `<div class="verdict"><span class="pop-dot ${a.allowed ? "ok" : "no"}"></span><span>${a.action}: <b>${a.allowed ? "allowed" : "refused"}</b></span>${a.why ? `<span class="why">${a.why}</span>` : ""}</div>`).join("") +
+      (res.outcome.pop ? `<div class="verdict"><span class="pop-dot ${res.outcome.pop.holder_accepted ? "ok" : "no"}"></span><span>holder with the key: <b>${res.outcome.pop.holder_accepted ? "accepted" : "rejected"}</b></span></div>
+        <div class="verdict"><span class="pop-dot ${res.outcome.pop.thief_accepted ? "no" : "ok"}"></span><span>copied token, different key: <b>${res.outcome.pop.thief_accepted ? "accepted" : "rejected"}</b></span></div>
+        <div class="verdict"><span class="pop-dot ${res.outcome.pop.replay_accepted ? "no" : "ok"}"></span><span>same signed proof sent a second time: <b>${res.outcome.pop.replay_accepted ? "accepted" : "rejected"}</b></span><span class="why">single-use proofs, tracked per server</span></div>` : "") +
+      (res.outcome.reexchange ? `<div class="verdict"><span class="pop-dot ${res.outcome.reexchange === "refused" ? "ok" : "no"}"></span><span>trying to exchange the revoked token again: <b>${res.outcome.reexchange}</b></span></div>` : "") +
+      "</div></div>";
+  }
+  out.innerHTML = html;
+  $("labNote").textContent = `audit: ${res.audit.entries.length} entries on this throwaway instance, chain ${res.audit.ok ? "intact" : "broken"}`;
+}
+async function labRun() {
+  const mine = ++labSeq;
+  const hops = labState.hops.filter(h => h.on).map(h => ({actor: h.actor, scope: h.scope, audience: h.audience, ttl: h.ttl}));
+  if (!hops.every(h => h.scope.length)) { $("labOut").innerHTML = '<div class="node skip"><div class="who">Pick at least one scope per hop</div></div>'; return; }
+  try {
+    const r = await fetch("/demo/lab", {method: "POST", headers: {"content-type": "application/json"},
+      body: JSON.stringify({user_scopes: labState.user, hops, bind_final: labState.bind, revoke_hop: Math.min(labState.revoke || 0, hops.length)})});
+    const body = await r.json();
+    if (mine !== labSeq) return;
+    if (!r.ok) { $("labOut").innerHTML = `<div class="node bad"><div class="who">${body.error || "error"}</div><div class="denied-reason">${body.error_description || ""}</div></div>`; return; }
+    labRender(body);
+  } catch (e) { $("labNote").textContent = "request failed"; }
+}
+$("labHops").addEventListener("change", () => { labSync(); clearTimeout(labTimer); labTimer = setTimeout(labRun, 250); });
+$("labUser").addEventListener("change", () => { labSync(); clearTimeout(labTimer); labTimer = setTimeout(labRun, 250); });
+$("labRevoke").addEventListener("change", () => { labSync(); clearTimeout(labTimer); labTimer = setTimeout(labRun, 250); });
+$("labBind").addEventListener("change", () => { labSync(); clearTimeout(labTimer); labTimer = setTimeout(labRun, 250); });
+labState.revoke = parseInt(new URLSearchParams(location.search).get("revoke") || "0", 10) || 0;
+labPresets(); labBuild(); labRun();
+
+/* ---- scroll reveal (progressive enhancement; page is fully visible without it) ---- */
+(function () {
+  if (!('IntersectionObserver' in window)) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const io = new IntersectionObserver((entries) => {
+    for (const en of entries) { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } }
+  }, {rootMargin: '0px 0px -8% 0px'});
+  document.querySelectorAll('.section, .hero-diagram, .legend, .note').forEach(el => { el.classList.add('reveal'); io.observe(el); });
+})();
+
+</script>
+</body>
+</html>

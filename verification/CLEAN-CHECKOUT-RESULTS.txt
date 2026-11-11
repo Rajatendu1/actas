@@ -1,0 +1,4 @@
+New recovery gate passed November 11, 2026 on Linux x86_64 / Python 3.10 / Chrome 156.
+28 pytest cases, 17 integration checks, 26 process checks; desktop+390px browser workflows.
+Fresh extracted package + new venv; actas0.14.1 imported from extracted source.
+Starlette/httpx test-client deprecation warning observed. Not the lost original suite.

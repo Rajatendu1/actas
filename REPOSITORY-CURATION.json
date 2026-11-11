@@ -1,0 +1,12 @@
+{
+  "unchanged_original_files": 30,
+  "changed": [
+    {
+      "path": "source/README.md",
+      "reason": "Replaced historical guide referencing unrecovered engineering files with current-guide pointer",
+      "sha256": "b2614c80bac5d1bd043ab658ceb7390d47e894cd21877711be7d96edaca1f3b8"
+    }
+  ],
+  "original_manifest": "ORIGINAL-MANIFEST.json",
+  "new_verification": "Authored after recovery, not historical original suite"
+}
