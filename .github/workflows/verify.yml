@@ -1,0 +1,37 @@
+name: Actas verification
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: actas-verify-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  recovery-verification:
+    name: recovery-verification
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.10'
+      - name: Install recorded recovery dependencies
+        run: |
+          python -m pip install -r verification/requirements-linux-py310-recovery.txt
+          python -m pip install --no-build-isolation --no-deps -e ./source
+      - name: Install checked Chrome for Testing
+        shell: bash
+        run: |
+          curl --fail --silent --show-error --location https://storage.googleapis.com/chrome-for-testing-public/156.0.8078.47/linux64/chrome-linux64.zip --output "$RUNNER_TEMP/chrome.zip"
+          echo 'e6c94490f0b6b337225aeb2d2a5034858516b7017356980ba94f5176d8774a50  '"$RUNNER_TEMP/chrome.zip" | sha256sum --check
+          unzip -q "$RUNNER_TEMP/chrome.zip" -d "$RUNNER_TEMP/actas-chrome"
+          echo "CHROME_BIN=$RUNNER_TEMP/actas-chrome/chrome-linux64/chrome" >> "$GITHUB_ENV"
+      - name: Verify recovered inputs and run new regression suite
+        run: sh verification/run_all.sh
