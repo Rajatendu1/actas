@@ -1,10 +1,20 @@
 {
-  "unchanged_original_files": 30,
+  "unchanged_original_files": 28,
   "changed": [
     {
       "path": "source/README.md",
       "reason": "Replaced historical guide referencing unrecovered engineering files with current-guide pointer",
       "sha256": "b2614c80bac5d1bd043ab658ceb7390d47e894cd21877711be7d96edaca1f3b8"
+    },
+    {
+      "path": "source/actas/app.py",
+      "reason": "Reject deeply nested or duplicate-key lab JSON with a client error instead of server failure or silent normalization",
+      "sha256": "97f7689932fd428fdf3ae496fdb2344bb87e829196ad71a5630ae3d74e6e6984"
+    },
+    {
+      "path": "source/actas/lab.py",
+      "reason": "Require an actual boolean for optional bind_final instead of truthiness coercion",
+      "sha256": "a5d9d8739a39ed8410ffbfd156ccdfb752ea079e795a06316b4486bfc224ea7c"
     }
   ],
   "original_manifest": "ORIGINAL-MANIFEST.json",
