@@ -48,6 +48,13 @@ The issuer/lab is fictional and not a production authorization service.
 
 ## Offline policy gate
 
+Install the package from GitHub to run the gate without cloning this
+repository, for example in a CI job:
+
+```sh
+pip install 'git+https://github.com/Rajatendu1/actas#subdirectory=source'
+```
+
 Export a policy pack from the workbench. Compare an edited candidate with the
 saved baseline without the website:
 
