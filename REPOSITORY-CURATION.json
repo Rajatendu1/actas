@@ -1,5 +1,5 @@
 {
-  "unchanged_original_files": 28,
+  "unchanged_original_files": 27,
   "changed": [
     {
       "path": "source/README.md",
@@ -15,6 +15,11 @@
       "path": "source/actas/lab.py",
       "reason": "Require an actual boolean for optional bind_final instead of truthiness coercion",
       "sha256": "a5d9d8739a39ed8410ffbfd156ccdfb752ea079e795a06316b4486bfc224ea7c"
+    },
+    {
+      "path": "source/actas/dpop.py",
+      "reason": "Reject non-integer signed proof iat before freshness arithmetic instead of coercion or server failure",
+      "sha256": "28b542b851ee9a35553f8059fe754f9ae9a61a9dfe6f51b668be8e35ea8e08ae"
     }
   ],
   "original_manifest": "ORIGINAL-MANIFEST.json",

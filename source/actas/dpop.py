@@ -282,6 +282,10 @@ def verify_proof(
     except Exception as exc:
         deny(f"proof did not verify: {exc}")
 
+    # PyJWT checks whether iat can be converted to int, but returns the
+    # original JSON value. Reject coercible strings/floats before arithmetic.
+    if type(claims["iat"]) is not int:
+        deny("iat must be an integer NumericDate")
     if claims["htm"] != method.upper():
         deny(f"htm mismatch: proof is for {claims['htm']}, request is {method.upper()}")
     if claims["htu"] != uri:
