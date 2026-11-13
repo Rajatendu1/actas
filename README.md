@@ -2,15 +2,18 @@
 
 The original 0.14.1 application source has been recovered from its authorized
 Vercel deployment. The guided policy workbench HTML and runtime configuration remain
-unchanged recovered inputs. Twenty-eight of 31 recovered files remain byte-identical.
-The current guide pointer and two lab input-validation modules are documented
+unchanged recovered inputs. Twenty-seven of 31 recovered files remain byte-identical.
+The current guide pointer and three input-validation modules are documented
 maintenance edits in `REPOSITORY-CURATION.json`. `ORIGINAL-MANIFEST.json` retains
 the original provider content IDs, SHA256 digests and sizes. This remains the
 recovered 0.14.1 maintenance line, not the lost full development archive.
 
 The lab rejects duplicate JSON fields, overly nested JSON and non-boolean
 `bind_final` values with a client error. Normal fictional lab controls and valid
-request behavior are unchanged.
+request behavior are unchanged. Signed DPoP proofs must carry an integer `iat`;
+coercible strings and fractional values are rejected as client errors before
+freshness arithmetic. Valid integer timestamps and single-use proof behavior
+are unchanged.
 
 This is not the lost full development archive. Its original tests, verification
 scripts, target hash lock and operational/threat documents were excluded from
@@ -108,7 +111,7 @@ systems with this application. A source change alone does not promote a hosted d
 
 Recovered November 11, 2026 from retained Vercel deployment inputs.
 The provider content IDs and original digests are recorded in
-`ORIGINAL-MANIFEST.json`; the documented README replacement and lab input-validation edits are exceptions
+`ORIGINAL-MANIFEST.json`; the documented README replacement and input-validation edits are exceptions
 when checking that original manifest. `REPOSITORY-CURATION.json` records their hashes.
 
 The immutable recovered archive SHA256 is
